@@ -54,6 +54,14 @@
 		"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
 		}
 	},
 	"variables": {
@@ -61,78 +69,54 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_sink__AzureSQL__ADV_WORKS_RAW')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
+			"name": "adf-data-ingestion-transformation_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
 			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server')]",
-					"database": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_sink__AzureSQL__ADV_WORKS_RAW_password": {
 						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_sink__adlsg2__adv_works_raw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
+					},
+					"ls_sink__adlsg2__adv_works_raw_accountKey": {
 						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_source__AzureSQL__Adv_works_db')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server')]",
-					"database": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
+					},
+					"ls_source__AzureSQL__Adv_works_db_password": {
 						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_source__adlsg2__adv_works_source_files')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
+					},
+					"ls_source__adlsg2__adv_works_source_files_accountKey": {
 						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_accountKey')]"
+					},
+					"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server": {
+						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server')]"
+					},
+					"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database": {
+						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database')]"
+					},
+					"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName": {
+						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName')]"
+					},
+					"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
+						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]"
+					},
+					"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
+						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server')]"
+					},
+					"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database": {
+						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database')]"
+					},
+					"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
+						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]"
+					},
+					"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
+						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url')]"
 					}
 				}
 			},

@@ -40,6 +40,12 @@
 		},
 		"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
 			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
 		}
 	}
 }
