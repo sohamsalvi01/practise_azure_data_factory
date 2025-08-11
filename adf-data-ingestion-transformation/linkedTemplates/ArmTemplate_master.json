@@ -55,6 +55,14 @@
 			"type": "string",
 			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
+		"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Sql/servers/sql-db-server--hello-world"
+		},
+		"MPE_new_AzureSQLServer_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlServer"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -82,17 +90,29 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"ls_sink__AzureSQL__ADV_WORKS_RAW_password": {
-						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_password')]"
-					},
 					"ls_sink__adlsg2__adv_works_raw_accountKey": {
 						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_accountKey')]"
+					},
+					"ls_source__adlsg2__adv_works_source_files_accountKey": {
+						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_accountKey')]"
+					},
+					"ls_sink__AzureSQL__ADV_WORKS_RAW_password": {
+						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_password')]"
 					},
 					"ls_source__AzureSQL__Adv_works_db_password": {
 						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_password')]"
 					},
-					"ls_source__adlsg2__adv_works_source_files_accountKey": {
-						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_accountKey')]"
+					"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
+						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]"
+					},
+					"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
+						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url')]"
+					},
+					"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
+						"value": "[parameters('MPE_new_AzureSQLServer_properties_privateLinkResourceId')]"
+					},
+					"MPE_new_AzureSQLServer_properties_groupId": {
+						"value": "[parameters('MPE_new_AzureSQLServer_properties_groupId')]"
 					},
 					"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server": {
 						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server')]"
@@ -103,9 +123,6 @@
 					"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName": {
 						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName')]"
 					},
-					"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
-						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]"
-					},
 					"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server')]"
 					},
@@ -114,9 +131,6 @@
 					},
 					"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
 						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]"
-					},
-					"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
-						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url')]"
 					}
 				}
 			},

@@ -7,21 +7,37 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-data-ingestion-transformation"
 		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_sink__AzureSQL__ADV_WORKS_RAW'"
-		},
 		"ls_sink__adlsg2__adv_works_raw_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_sink__adlsg2__adv_works_raw'"
+		},
+		"ls_source__adlsg2__adv_works_source_files_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_source__adlsg2__adv_works_source_files'"
+		},
+		"ls_sink__AzureSQL__ADV_WORKS_RAW_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_sink__AzureSQL__ADV_WORKS_RAW'"
 		},
 		"ls_source__AzureSQL__Adv_works_db_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_source__AzureSQL__Adv_works_db'"
 		},
-		"ls_source__adlsg2__adv_works_source_files_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_source__adlsg2__adv_works_source_files'"
+		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Sql/servers/sql-db-server--hello-world"
+		},
+		"MPE_new_AzureSQLServer_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlServer"
 		},
 		"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server": {
 			"type": "string",
@@ -35,10 +51,6 @@
 			"type": "string",
 			"defaultValue": "sql_server_admin"
 		},
-		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
-		},
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "sql-db-server--hello-world.database.windows.net"
@@ -50,38 +62,12 @@
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "sql_server_admin"
-		},
-		"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_sink__AzureSQL__ADV_WORKS_RAW')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server')]",
-					"database": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_password')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_sink__adlsg2__adv_works_raw')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -94,28 +80,6 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_source__AzureSQL__Adv_works_db')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"server": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server')]",
-					"database": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_password')]"
 					}
 				}
 			},
@@ -137,6 +101,113 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IR-new-Managed-VNet')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "North Europe",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 10,
+							"cleanup": false,
+							"customProperties": []
+						},
+						"pipelineExternalComputeScaleProperties": {
+							"timeToLive": 60,
+							"numberOfPipelineNodes": 1,
+							"numberOfExternalNodes": 1
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default/MPE_new_AzureSQLServer')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"privateLinkResourceId": "[parameters('MPE_new_AzureSQLServer_properties_privateLinkResourceId')]",
+				"groupId": "[parameters('MPE_new_AzureSQLServer_properties_groupId')]"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink__AzureSQL__ADV_WORKS_RAW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server')]",
+					"database": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_source__AzureSQL__Adv_works_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server')]",
+					"database": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+			]
 		}
 	]
 }

@@ -40,6 +40,12 @@
 		},
 		"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
 			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
+			"value": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Sql/servers/sql-db-server--hello-world"
+		},
+		"MPE_new_AzureSQLServer_properties_groupId": {
+			"value": "sqlServer"
 		}
 	}
 }
