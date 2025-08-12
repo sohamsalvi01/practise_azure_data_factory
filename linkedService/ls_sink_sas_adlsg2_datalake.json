@@ -6,11 +6,7 @@
 		"type": "AzureBlobFS",
 		"typeProperties": {
 			"sasUri": "https://adlsg2datalake.dfs.core.windows.net/",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDMwN0QxMTIzLUY0RTktNDg3Qy1CN0NFLThDRTIyQ0Q5Q0M0OF9lMjNjMDk3My02NmZiLTQwMjAtYWUzZS04ZDM3OGViZDMyNTAiDQp9"
-		},
-		"connectVia": {
-			"referenceName": "IR-new-Managed-VNet",
-			"type": "IntegrationRuntimeReference"
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDMwN0QxMTIzLUY0RTktNDg3Qy1CN0NFLThDRTIyQ0Q5Q0M0OF81NmIzNjI5NS1mMWVmLTQ5YWUtYTkzNy1iNmZiZTRjZTM4NWQiDQp9"
 		}
 	}
 }
