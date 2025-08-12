@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_sink__AzureSQL__ADV_WORKS_RAW'"
 		},
-		"ls_sink__adlsg2__adv_works_raw_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_sink__adlsg2__adv_works_raw'"
-		},
 		"ls_source__AzureSQL__Adv_works_db_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_source__AzureSQL__Adv_works_db'"
@@ -63,6 +59,10 @@
 			"type": "string",
 			"defaultValue": "sqlServer"
 		},
+		"ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVault-StoreSecrets.vault.azure.net/"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -90,9 +90,6 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"ls_sink__adlsg2__adv_works_raw_accountKey": {
-						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_accountKey')]"
-					},
 					"ls_source__adlsg2__adv_works_source_files_accountKey": {
 						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_accountKey')]"
 					},
@@ -102,11 +99,14 @@
 					"ls_source__AzureSQL__Adv_works_db_password": {
 						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_password')]"
 					},
-					"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
-						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]"
-					},
 					"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
 						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url')]"
+					},
+					"ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl": {
+						"value": "[parameters('ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl')]"
+					},
+					"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
+						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]"
 					},
 					"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
 						"value": "[parameters('MPE_new_AzureSQLServer_properties_privateLinkResourceId')]"

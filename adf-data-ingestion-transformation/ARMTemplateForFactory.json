@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_sink__AzureSQL__ADV_WORKS_RAW'"
 		},
-		"ls_sink__adlsg2__adv_works_raw_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_sink__adlsg2__adv_works_raw'"
-		},
 		"ls_source__AzureSQL__Adv_works_db_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_source__AzureSQL__Adv_works_db'"
@@ -62,6 +58,10 @@
 		"MPE_new_AzureSQLServer_properties_groupId": {
 			"type": "string",
 			"defaultValue": "sqlServer"
+		},
+		"ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVault-StoreSecrets.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -106,12 +106,18 @@
 				"typeProperties": {
 					"url": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]",
 					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('ls_sink__adlsg2__adv_works_raw_accountKey')]"
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_sink_keyvault_adlsg2_datalake",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "secret-adlsg2datalake-AccessKey"
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_keyvault_adlsg2_datalake')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_source__AzureSQL__Adv_works_db')]",
@@ -208,6 +214,19 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_keyvault_adlsg2_datalake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }
