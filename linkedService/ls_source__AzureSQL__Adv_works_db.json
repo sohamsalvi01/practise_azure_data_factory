@@ -13,7 +13,7 @@
 			"password": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
-					"referenceName": "ls_sink_keyvault_adlsg2_datalake",
+					"referenceName": "ls_project_keyvault",
 					"type": "LinkedServiceReference"
 				},
 				"secretName": "secret-adv-works-db-password"
