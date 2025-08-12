@@ -35,6 +35,10 @@
 			"type": "string",
 			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
+		"ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVault-StoreSecrets.vault.azure.net/"
+		},
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "sql-db-server--hello-world.database.windows.net"
@@ -58,10 +62,6 @@
 		"MPE_new_AzureSQLServer_properties_groupId": {
 			"type": "string",
 			"defaultValue": "sqlServer"
-		},
-		"ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl": {
-			"type": "string",
-			"defaultValue": "https://KeyVault-StoreSecrets.vault.azure.net/"
 		}
 	},
 	"variables": {
@@ -118,6 +118,19 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sink_keyvault_adlsg2_datalake')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_keyvault_adlsg2_datalake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_source__AzureSQL__Adv_works_db')]",
@@ -214,19 +227,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_sink_keyvault_adlsg2_datalake')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureKeyVault",
-				"typeProperties": {
-					"baseUrl": "[parameters('ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl')]"
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }
