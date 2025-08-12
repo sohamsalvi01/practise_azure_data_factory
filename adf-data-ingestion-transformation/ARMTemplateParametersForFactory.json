@@ -11,6 +11,9 @@
 		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
 			"value": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
+		"ls_sink_sas_adlsg2_datalake_sasUri": {
+			"value": ""
+		},
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 			"value": "sql-db-server--hello-world.database.windows.net"
 		},
