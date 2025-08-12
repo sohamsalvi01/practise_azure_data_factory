@@ -1,12 +1,19 @@
 {
 	"name": "ls_sink__adlsg2__adv_works_raw",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
 			"url": "https://adlsg2datalake.dfs.core.windows.net/",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDMwN0QxMTIzLUY0RTktNDg3Qy1CN0NFLThDRTIyQ0Q5Q0M0OF85NzYyZDQzNy0yYmMzLTRhOWQtYTJiMC03YWZkNjNiNjc4MGIiDQp9"
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_sink_keyvault_adlsg2_datalake",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "secret-adlsg2datalake-AccessKey"
+			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
