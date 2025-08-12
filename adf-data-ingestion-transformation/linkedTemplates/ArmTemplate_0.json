@@ -7,11 +7,7 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-data-ingestion-transformation"
 		},
-		"ls_source__AzureSQL__Adv_works_db_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_source__AzureSQL__Adv_works_db'"
-		},
-		"ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl": {
+		"ls_project_keyvault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://KeyVault-StoreSecrets.vault.azure.net/"
 		},
@@ -53,14 +49,14 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_sink_keyvault_adlsg2_datalake')]",
+			"name": "[concat(parameters('factoryName'), '/ls_project_keyvault')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"type": "AzureKeyVault",
 				"typeProperties": {
-					"baseUrl": "[parameters('ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl')]"
+					"baseUrl": "[parameters('ls_project_keyvault_properties_typeProperties_baseUrl')]"
 				}
 			},
 			"dependsOn": []
@@ -140,7 +136,7 @@
 					"accountKey": {
 						"type": "AzureKeyVaultSecret",
 						"store": {
-							"referenceName": "ls_sink_keyvault_adlsg2_datalake",
+							"referenceName": "ls_project_keyvault",
 							"type": "LinkedServiceReference"
 						},
 						"secretName": "secret-adlsg2datalake-AccessKey"
@@ -153,7 +149,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]",
-				"[concat(variables('factoryId'), '/linkedServices/ls_sink_keyvault_adlsg2_datalake')]"
+				"[concat(variables('factoryId'), '/linkedServices/ls_project_keyvault')]"
 			]
 		},
 		{
@@ -171,8 +167,12 @@
 					"authenticationType": "SQL",
 					"userName": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]",
 					"password": {
-						"type": "SecureString",
-						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_password')]"
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_project_keyvault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "secret-adv-works-db-password"
 					}
 				},
 				"connectVia": {
@@ -181,7 +181,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_project_keyvault')]"
 			]
 		}
 	]
