@@ -5,23 +5,8 @@
 		"factoryName": {
 			"value": "adf-data-ingestion-transformation"
 		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_password": {
-			"value": ""
-		},
 		"ls_source__AzureSQL__Adv_works_db_password": {
 			"value": ""
-		},
-		"ls_source__adlsg2__adv_works_source_files_accountKey": {
-			"value": ""
-		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server": {
-			"value": "sql-db-server--hello-world.database.windows.net"
-		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database": {
-			"value": "ADV_WORKS_RAW"
-		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName": {
-			"value": "sql_server_admin"
 		},
 		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
 			"value": "https://adlsg2datalake.dfs.core.windows.net/"
@@ -38,14 +23,17 @@
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
 			"value": "sql_server_admin"
 		},
-		"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
-			"value": "https://adlsg2datalake.dfs.core.windows.net/"
-		},
 		"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
 			"value": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Sql/servers/sql-db-server--hello-world"
 		},
 		"MPE_new_AzureSQLServer_properties_groupId": {
 			"value": "sqlServer"
+		},
+		"mpe_adlsg2_datalake_properties_privateLinkResourceId": {
+			"value": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Storage/storageAccounts/adlsg2datalake"
+		},
+		"mpe_adlsg2_datalake_properties_groupId": {
+			"value": "dfs"
 		},
 		"containerUri": {
 			"value": ""

@@ -7,14 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-data-ingestion-transformation"
 		},
-		"ls_source__adlsg2__adv_works_source_files_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_source__adlsg2__adv_works_source_files'"
-		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'ls_sink__AzureSQL__ADV_WORKS_RAW'"
-		},
 		"ls_source__AzureSQL__Adv_works_db_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'ls_source__AzureSQL__Adv_works_db'"
@@ -22,14 +14,6 @@
 		"ls_sink_keyvault_adlsg2_datalake_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://KeyVault-StoreSecrets.vault.azure.net/"
-		},
-		"ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
-		},
-		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
 		"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
 			"type": "string",
@@ -39,17 +23,17 @@
 			"type": "string",
 			"defaultValue": "sqlServer"
 		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server": {
+		"mpe_adlsg2_datalake_properties_privateLinkResourceId": {
 			"type": "string",
-			"defaultValue": "sql-db-server--hello-world.database.windows.net"
+			"defaultValue": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Storage/storageAccounts/adlsg2datalake"
 		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database": {
+		"mpe_adlsg2_datalake_properties_groupId": {
 			"type": "string",
-			"defaultValue": "ADV_WORKS_RAW"
+			"defaultValue": "dfs"
 		},
-		"ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName": {
+		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "sql_server_admin"
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 			"type": "string",
@@ -82,51 +66,11 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_source__adlsg2__adv_works_source_files')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ls_source__adlsg2__adv_works_source_files_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('ls_source__adlsg2__adv_works_source_files_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/default')]",
 			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
 			"apiVersion": "2018-06-01",
 			"properties": {},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ls_sink__adlsg2__adv_works_raw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "AzureKeyVaultSecret",
-						"store": {
-							"referenceName": "ls_sink_keyvault_adlsg2_datalake",
-							"type": "LinkedServiceReference"
-						},
-						"secretName": "secret-adlsg2datalake-AccessKey"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_sink_keyvault_adlsg2_datalake')]"
-			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/IR-new-Managed-VNet')]",
@@ -173,22 +117,33 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ls_sink__AzureSQL__ADV_WORKS_RAW')]",
+			"name": "[concat(parameters('factoryName'), '/default/mpe_adlsg2_datalake')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"privateLinkResourceId": "[parameters('mpe_adlsg2_datalake_properties_privateLinkResourceId')]",
+				"groupId": "[parameters('mpe_adlsg2_datalake_properties_groupId')]"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink__adlsg2__adv_works_raw')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureSqlDatabase",
+				"type": "AzureBlobFS",
 				"typeProperties": {
-					"server": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_server')]",
-					"database": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_database')]",
-					"encrypt": "mandatory",
-					"trustServerCertificate": false,
-					"authenticationType": "SQL",
-					"userName": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('ls_sink__AzureSQL__ADV_WORKS_RAW_password')]"
+					"url": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_sink_keyvault_adlsg2_datalake",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "secret-adlsg2datalake-AccessKey"
 					}
 				},
 				"connectVia": {
@@ -197,7 +152,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_keyvault_adlsg2_datalake')]"
 			]
 		},
 		{
