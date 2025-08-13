@@ -1,0 +1,14 @@
+{
+	"name": "ls_sink_acl_adlsg2_datalake",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"connectVia": {
+			"referenceName": "IR-new-Managed-VNet",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
