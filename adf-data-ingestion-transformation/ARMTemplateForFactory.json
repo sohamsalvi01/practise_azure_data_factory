@@ -102,9 +102,15 @@
 				"type": "AzureBlobFS",
 				"typeProperties": {
 					"sasUri": "[parameters('ls_sink_sas_adlsg2_datalake_sasUri')]"
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/ls_source__AzureSQL__Adv_works_db')]",
