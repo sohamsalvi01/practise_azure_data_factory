@@ -28,7 +28,10 @@
 							},
 							{
 								"name": "abc_active_flag",
-								"value": "$$COLUMN:true"
+								"value": {
+									"value": "@string('true')",
+									"type": "Expression"
+								}
 							},
 							{
 								"name": "abc_load_timestamp",
