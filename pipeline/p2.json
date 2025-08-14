@@ -19,7 +19,7 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"recursive": false,
+							"recursive": true,
 							"wildcardFolderPath": "p2/source_odc_data/",
 							"wildcardFileName": "*_part?1.csv",
 							"enablePartitionDiscovery": false
