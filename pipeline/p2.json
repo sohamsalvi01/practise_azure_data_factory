@@ -21,7 +21,7 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": false,
 							"wildcardFolderPath": "p2/source_odc_data/",
-							"wildcardFileName": "*",
+							"wildcardFileName": "*_part?1.csv",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -32,7 +32,7 @@
 						"type": "DelimitedTextSink",
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": "FlattenHierarchy"
+							"copyBehavior": "PreserveHierarchy"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
