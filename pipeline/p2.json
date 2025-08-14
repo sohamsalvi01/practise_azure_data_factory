@@ -19,7 +19,7 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"fileListPath": "hello-world-pipelines/p2/source_odc_data/list_of_files.txt",
+							"fileListPath": "hello-world-pipelines/p2/source_odc_data/list_of_files/list_of_files.txt",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
