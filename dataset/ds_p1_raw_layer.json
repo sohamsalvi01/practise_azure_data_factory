@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "1.csv",
 				"folderPath": "p1/sink-raw-layer",
 				"fileSystem": "hello-world-pipelines"
 			},
