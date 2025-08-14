@@ -19,9 +19,7 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": "p2/source_odc_data/",
-							"wildcardFileName": "*_part?1.csv",
+							"fileListPath": "hello-world-pipelines/p2/source_odc_data/list_of_files.txt",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
