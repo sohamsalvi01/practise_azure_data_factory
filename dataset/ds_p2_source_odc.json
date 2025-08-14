@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "people-2023.csv",
 				"folderPath": "p2/source_odc_data",
 				"fileSystem": "hello-world-pipelines"
 			},
