@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "p2",
+				"fileName": "people_2025_part_1.csv",
+				"folderPath": "p2/source_odc_data/people-year=2025",
 				"fileSystem": "hello-world-pipelines"
 			},
 			"columnDelimiter": ",",
