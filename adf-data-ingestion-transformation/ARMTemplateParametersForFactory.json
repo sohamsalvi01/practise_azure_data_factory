@@ -14,11 +14,17 @@
 		"ls_sink_acl_adlsg2_datalake_properties_typeProperties_url": {
 			"value": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
+		"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
 		"ls_sink_rbac_adlsg2_datalake_properties_typeProperties_url": {
 			"value": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
 		"ls_sink_sas_adlsg2_datalake_sasUri": {
 			"value": ""
+		},
+		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 			"value": "sql-db-server--hello-world.database.windows.net"
@@ -40,12 +46,6 @@
 		},
 		"mpe_adlsg2_datalake_properties_groupId": {
 			"value": "dfs"
-		},
-		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
-			"value": "https://adlsg2datalake.dfs.core.windows.net/"
-		},
-		"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
-			"value": "https://adlsg2datalake.dfs.core.windows.net/"
 		}
 	}
 }
