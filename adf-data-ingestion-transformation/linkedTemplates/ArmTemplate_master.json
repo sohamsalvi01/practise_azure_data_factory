@@ -55,6 +55,14 @@
 			"type": "string",
 			"defaultValue": "dfs"
 		},
+		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -117,6 +125,12 @@
 					},
 					"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
 						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]"
+					},
+					"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
+						"value": "[parameters('ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url')]"
+					},
+					"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
+						"value": "[parameters('ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url')]"
 					}
 				}
 			},

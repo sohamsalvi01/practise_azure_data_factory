@@ -41,6 +41,12 @@
 		"mpe_adlsg2_datalake_properties_groupId": {
 			"value": "dfs"
 		},
+		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
 		"containerUri": {
 			"value": ""
 		},

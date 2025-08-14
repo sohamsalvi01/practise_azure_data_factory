@@ -54,6 +54,14 @@
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "sql_server_admin"
+		},
+		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
@@ -252,6 +260,44 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]",
 				"[concat(variables('factoryId'), '/linkedServices/ls_project_keyvault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_souce__helloworld_adlsg2_souce_odc_data')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_helloworld_adlsg2_raw_data_layer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
 			]
 		}
 	]
