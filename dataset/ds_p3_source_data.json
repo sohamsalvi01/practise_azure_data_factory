@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "people-100.csv",
-				"folderPath": "p3/source_odc_extract/year=2023/month=01",
+				"folderPath": "p3/source_odc_extract/",
 				"fileSystem": "hello-world-pipelines"
 			},
 			"columnDelimiter": ",",
