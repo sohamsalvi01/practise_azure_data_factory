@@ -1,0 +1,23 @@
+{
+	"name": "ds_p4_source_data_extract",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "p3/source_odc_extract/",
+				"fileSystem": "hello-world-pipelines"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
