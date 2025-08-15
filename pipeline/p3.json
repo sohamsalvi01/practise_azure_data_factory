@@ -22,8 +22,7 @@
 							"recursive": true,
 							"wildcardFolderPath": "p3/source_odc_extract/*",
 							"wildcardFileName": "*.*",
-							"enablePartitionDiscovery": true,
-							"partitionRootPath": "hello-world-pipelines/p3/source_odc_extract/"
+							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
