@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "test.zip",
 				"folderPath": "p5/target_archive_folder",
 				"fileSystem": "hello-world-pipelines"
 			},
