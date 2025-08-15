@@ -485,6 +485,8 @@
 						"fileSystem": "hello-world-pipelines"
 					},
 					"columnDelimiter": ",",
+					"compressionCodec": null,
+					"compressionLevel": "Optimal",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
