@@ -7,7 +7,7 @@
 			"url": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
 		"connectVia": {
-			"referenceName": "IR-new-Managed-VNet",
+			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
 		}
 	}
