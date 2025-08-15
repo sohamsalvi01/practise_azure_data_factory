@@ -45,7 +45,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_p5_target_archive_lication_binary_file",
+						"referenceName": "ds_p5_target_temp_location",
 						"type": "DatasetReference"
 					}
 				]
