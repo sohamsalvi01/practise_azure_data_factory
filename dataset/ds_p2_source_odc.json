@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "p2/source_odc_data",
+				"folderPath": "p3",
 				"fileSystem": "hello-world-pipelines"
 			},
 			"columnDelimiter": ",",
