@@ -59,13 +59,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_p3_source_data",
+						"referenceName": "ds_p5_source_data",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_p3_target_raw_data_layer",
+						"referenceName": "ds_p5_target_archived_files_location",
 						"type": "DatasetReference"
 					}
 				]
