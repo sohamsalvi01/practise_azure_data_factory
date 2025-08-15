@@ -10,12 +10,12 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "output.zip",
+				"fileName": "output.gz",
 				"folderPath": "p5/target_archive_folder",
 				"fileSystem": "hello-world-pipelines"
 			},
 			"compression": {
-				"type": "ZipDeflate",
+				"type": "gzip",
 				"level": "Optimal"
 			}
 		}
