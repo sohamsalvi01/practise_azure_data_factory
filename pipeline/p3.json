@@ -23,7 +23,7 @@
 							"wildcardFolderPath": "p3/source_odc_extract/*",
 							"wildcardFileName": "*.csv",
 							"enablePartitionDiscovery": true,
-							"partitionRootPath": "hello-world-pipelines/p3/source_odc_extract"
+							"partitionRootPath": "hello-world-pipelines/p3/source_odc_extract/"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
