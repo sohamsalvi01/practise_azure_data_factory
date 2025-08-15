@@ -1,5 +1,5 @@
 {
-	"name": "p2_copy1",
+	"name": "p3",
 	"properties": {
 		"activities": [
 			{
@@ -20,9 +20,8 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "p2/source_odc_data/",
-							"wildcardFileName": "*_part?1.csv",
-							"enablePartitionDiscovery": false
+							"enablePartitionDiscovery": true,
+							"partitionRootPath": "hello-world-pipelines/p3/source_odc_extract"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
@@ -52,13 +51,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_p2_source_odc",
+						"referenceName": "ds_p3_source_data",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_p2_target_raw_layer",
+						"referenceName": "ds_p3_target_raw_data_layer",
 						"type": "DatasetReference"
 					}
 				]
