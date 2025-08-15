@@ -476,50 +476,94 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "DelimitedTextSource",
+								"type": "BinarySource",
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
 									"recursive": true,
 									"wildcardFolderPath": "p3/source_odc_extract/*",
-									"wildcardFileName": "*.csv",
-									"enablePartitionDiscovery": false
+									"wildcardFileName": "*",
+									"deleteFilesAfterCompletion": false
 								},
 								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
+									"type": "BinaryReadSettings"
 								}
 							},
 							"sink": {
-								"type": "DelimitedTextSink",
+								"type": "BinarySink",
 								"storeSettings": {
 									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "MergeFiles"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ""
+									"copyBehavior": "PreserveHierarchy"
 								}
 							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
+							"enableStaging": false
 						},
 						"inputs": [
 							{
-								"referenceName": "ds_p5_source_data",
+								"referenceName": "ds_p5_source_odc_location__binary_file",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "ds_p5_target_archived_files_location",
+								"referenceName": "ds_p5_target_temp_location",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p5/target_temp_location/*",
+									"wildcardFileName": "*",
+									"deleteFilesAfterCompletion": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p5_target_temp_location",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p5_target_archive_lication_binary_file",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -532,8 +576,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_p5_source_data')]",
-				"[concat(variables('factoryId'), '/datasets/ds_p5_target_archived_files_location')]"
+				"[concat(variables('factoryId'), '/datasets/ds_p5_source_odc_location__binary_file')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p5_target_temp_location')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p5_target_archive_lication_binary_file')]"
 			]
 		},
 		{
@@ -782,7 +827,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "p3/source_odc_extract/",
+						"folderPath": "p3/source_odc_extract",
 						"fileSystem": "hello-world-pipelines"
 					},
 					"columnDelimiter": ",",
@@ -794,6 +839,57 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_source_odc_location__binary_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/source_odc_extract",
+						"fileSystem": "hello-world-pipelines"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_archive_lication_binary_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "output.zip",
+						"folderPath": "p5/target_archive_folder",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"compression": {
+						"type": "ZipDeflate",
+						"level": "Optimal"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
 			]
 		},
 		{
@@ -810,6 +906,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": "output.zip",
 						"folderPath": "p5/target_archive_folder",
 						"fileSystem": "hello-world-pipelines"
 					},
@@ -818,9 +915,32 @@
 					"compressionLevel": "Optimal",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
-					"quoteChar": "\""
+					"quoteChar": null
 				},
 				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_temp_location')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p5/target_temp_location",
+						"fileSystem": "hello-world-pipelines"
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
