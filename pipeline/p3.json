@@ -21,8 +21,9 @@
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
 							"wildcardFolderPath": "p3/source_odc_extract/*",
-							"wildcardFileName": "*.*",
-							"enablePartitionDiscovery": false
+							"wildcardFileName": "*.csv",
+							"enablePartitionDiscovery": true,
+							"partitionRootPath": "p3/source_odc_extract/"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
