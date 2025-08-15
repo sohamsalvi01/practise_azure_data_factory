@@ -32,7 +32,10 @@
 							"partitionRootPath": "hello-world-pipelines/p3/source_odc_extract/"
 						},
 						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
+							"type": "DelimitedTextReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings"
+							}
 						}
 					},
 					"sink": {
@@ -59,13 +62,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_p3_source_data",
+						"referenceName": "ds_p4_source_data_extract",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_p3_target_raw_data_layer",
+						"referenceName": "ds_p4_target_raw_data",
 						"type": "DatasetReference"
 					}
 				]
