@@ -28,8 +28,7 @@
 							"recursive": true,
 							"wildcardFolderPath": "p4/source_odc_data_extract/*",
 							"wildcardFileName": "*.zip",
-							"enablePartitionDiscovery": true,
-							"partitionRootPath": "hello-world-pipelines/p4/source_odc_data_extract"
+							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings",
