@@ -20,7 +20,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "p3/target_raw_layer/*",
+							"wildcardFolderPath": "p3/source_odc_extract/*",
 							"wildcardFileName": "*.*",
 							"enablePartitionDiscovery": false
 						},
