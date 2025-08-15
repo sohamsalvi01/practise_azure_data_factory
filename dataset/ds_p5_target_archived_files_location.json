@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "p2/target_raw_layer",
+				"folderPath": "p5/target_archive_folder",
 				"fileSystem": "hello-world-pipelines"
 			},
 			"columnDelimiter": ",",
