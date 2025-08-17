@@ -17,6 +17,10 @@
 			"param_global__source_sql_server_admin_password_secret_name": {
 				"type": "string",
 				"value": "secret-adv-works-db-password"
+			},
+			"param_global__sink_adlsg2_datalake": {
+				"type": "string",
+				"value": "adlsg2datalake"
 			}
 		}
 	},
