@@ -9,6 +9,10 @@
 			"param_global__source_sql_db_name": {
 				"type": "string",
 				"value": "AzureSQL__Source "
+			},
+			"param_global__sql_server_admin_name": {
+				"type": "string",
+				"value": "sql_server_admin"
 			}
 		}
 	},
