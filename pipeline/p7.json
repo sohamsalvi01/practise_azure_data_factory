@@ -69,7 +69,7 @@
 							}
 						],
 						"sqlReaderQuery": {
-							"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE ModifiedDate = ', pipeline().parameters.param_pl_year)",
+							"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE YEAR(ModifiedDate) = ', pipeline().parameters.param_pl_year)",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00",
