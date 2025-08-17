@@ -68,7 +68,10 @@
 								}
 							}
 						],
-						"sqlReaderQuery": "SELECT TOP 1000 * FROM SALESLT.ADDRESS",
+						"sqlReaderQuery": {
+							"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE ModifiedDate = ', pipeline().parameters.param_pl_year)",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -126,6 +129,16 @@
 				]
 			}
 		],
+		"parameters": {
+			"param_pl_year": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"var_pl_year": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }
