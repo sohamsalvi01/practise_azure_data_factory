@@ -4,7 +4,7 @@
 		"globalParameters": {
 			"param_global__source_sql_server": {
 				"type": "string",
-				"value": "sql-db-server--hello-world"
+				"value": "sql-db-server--hello-world.database.windows.net"
 			},
 			"param_global__source_sql_db_name": {
 				"type": "string",
