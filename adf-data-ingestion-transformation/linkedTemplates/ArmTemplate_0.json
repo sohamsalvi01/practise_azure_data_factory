@@ -334,14 +334,34 @@
 					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"param_ds_filename": {
+						"type": "string"
+					},
+					"param_ds_filepath": {
+						"type": "string"
+					},
+					"param_ds_container": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "people.csv",
-						"folderPath": "p1/source-odc-data",
-						"fileSystem": "hello-world-pipelines"
+						"fileName": {
+							"value": "@dataset().param_ds_filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().param_ds_filepath",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().param_ds_container",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -368,8 +388,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "2",
-						"folderPath": "p1/sink-raw-layer",
+						"folderPath": "p2/target_raw_layer/",
 						"fileSystem": "hello-world-pipelines"
 					},
 					"columnDelimiter": ",",
