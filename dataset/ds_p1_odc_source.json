@@ -6,13 +6,13 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"var_ds_filename": {
+			"param_ds_filename": {
 				"type": "string"
 			},
-			"var_ds_filepath": {
+			"param_ds_filepath": {
 				"type": "string"
 			},
-			"var_ds_container": {
+			"param_ds_container": {
 				"type": "string"
 			}
 		},

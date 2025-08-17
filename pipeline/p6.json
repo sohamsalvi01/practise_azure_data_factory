@@ -19,14 +19,6 @@
 						"type": "DelimitedTextSource",
 						"additionalColumns": [
 							{
-								"name": "abc_file_path",
-								"value": "$$FILEPATH"
-							},
-							{
-								"name": "abc_file_name",
-								"value": "$$FILENAME"
-							},
-							{
 								"name": "abc_active_flag",
 								"value": {
 									"value": "@string('true')",
@@ -112,15 +104,15 @@
 						"referenceName": "ds_p1_odc_source",
 						"type": "DatasetReference",
 						"parameters": {
-							"var_ds_filename": {
+							"param_ds_filename": {
 								"value": "@pipeline().parameters.param_p_filename",
 								"type": "Expression"
 							},
-							"var_ds_filepath": {
+							"param_ds_filepath": {
 								"value": "@pipeline().parameters.param_p_file_path",
 								"type": "Expression"
 							},
-							"var_ds_container": {
+							"param_ds_container": {
 								"value": "@pipeline().parameters.param_p_container_name",
 								"type": "Expression"
 							}
