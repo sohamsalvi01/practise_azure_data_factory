@@ -121,6 +121,20 @@
 				]
 			}
 		],
+		"parameters": {
+			"param_p_filename": {
+				"type": "string",
+				"defaultValue": "1.csv"
+			},
+			"param_p_container_name": {
+				"type": "string",
+				"defaultValue": "hello-world-pipelines"
+			},
+			"param_file_path": {
+				"type": "string",
+				"defaultValue": "p1/sink-raw-layer"
+			}
+		},
 		"variables": {
 			"var_p_filepath": {
 				"type": "String",
