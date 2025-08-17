@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
+						"type": "AzureSqlSource",
 						"additionalColumns": [
 							{
 								"name": "abc_active_flag",
@@ -68,19 +68,8 @@
 								}
 							}
 						],
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFolderPath": {
-								"value": "@concat(pipeline().parameters.param_p_file_path,'/*')",
-								"type": "Expression"
-							},
-							"wildcardFileName": "*",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "DelimitedTextSink",
@@ -106,22 +95,8 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_p1_odc_source",
-						"type": "DatasetReference",
-						"parameters": {
-							"param_ds_filename": {
-								"value": "@pipeline().parameters.param_p_filename",
-								"type": "Expression"
-							},
-							"param_ds_filepath": {
-								"value": "@pipeline().parameters.param_p_file_path",
-								"type": "Expression"
-							},
-							"param_ds_container": {
-								"value": "@pipeline().parameters.param_p_container_name",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "ds_p7_source_ad_works_db",
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
@@ -133,16 +108,21 @@
 			}
 		],
 		"parameters": {
-			"param_p_filename": {
-				"type": "string"
-			},
-			"param_p_container_name": {
+			"param_pl_sql_server_domain_name": {
 				"type": "string",
-				"defaultValue": "hello-world-pipelines"
+				"defaultValue": "sql-db-server--hello-world.database.windows.net"
 			},
-			"param_p_file_path": {
+			"param_pl_sql_db_name": {
 				"type": "string",
-				"defaultValue": "p2/source_odc_data"
+				"defaultValue": "AzureSQL__Source"
+			},
+			"param_pl_sql_server_admin_name": {
+				"type": "string",
+				"defaultValue": "sql_server_admin"
+			},
+			"param_pl_sql_server_password_secret_name": {
+				"type": "string",
+				"defaultValue": "secret-adv-works-db-password"
 			}
 		},
 		"annotations": []
