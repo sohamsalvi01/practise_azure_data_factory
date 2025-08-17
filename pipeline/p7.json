@@ -68,6 +68,7 @@
 								}
 							}
 						],
+						"sqlReaderQuery": "SELECT TOP 1000 * FROM SALESLT.ADDRESS",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
