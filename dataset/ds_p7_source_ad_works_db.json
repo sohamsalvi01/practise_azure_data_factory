@@ -1,0 +1,62 @@
+{
+	"name": "ds_p7_source_ad_works_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_souce_param__hello_word_source__advworks_db",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
+				"param_ls_sql_db_name": "AzureSQL__Source ",
+				"param_ls_sql_server_admin_name": "sql_server_admin",
+				"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AddressID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AddressLine1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AddressLine2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "City",
+				"type": "nvarchar"
+			},
+			{
+				"name": "StateProvince",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CountryRegion",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "rowguid",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": "Address"
+		}
+	}
+}
