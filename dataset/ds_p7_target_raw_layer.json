@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "sample_address.csv",
 				"folderPath": "p7/target_raw_layer",
 				"fileSystem": "hello-world-pipelines"
 			},
