@@ -141,20 +141,6 @@
 				"defaultValue": "p1/sink-raw-layer"
 			}
 		},
-		"variables": {
-			"var_p_filepath": {
-				"type": "String",
-				"defaultValue": "p1/sink-raw-layer"
-			},
-			"var_p_fileame": {
-				"type": "String",
-				"defaultValue": "1.csv"
-			},
-			"var-p_containername": {
-				"type": "String",
-				"defaultValue": "hello-world-pipelines"
-			}
-		},
 		"annotations": []
 	}
 }
