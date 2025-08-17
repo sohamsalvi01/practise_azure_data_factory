@@ -194,7 +194,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[dbo].[SP_ABC_NEXT_VAL]"
+					"storedProcedureName": "[dbo].[SP_ABC_NEXT_VAL]",
+					"storedProcedureParameters": {
+						"VAR_OP_YEAR": {
+							"value": null,
+							"type": "Int32"
+						}
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "ls_souce_param__hello_word_source__advworks_db",
