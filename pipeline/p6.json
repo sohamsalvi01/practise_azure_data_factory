@@ -129,8 +129,7 @@
 		],
 		"parameters": {
 			"param_p_filename": {
-				"type": "string",
-				"defaultValue": "1.csv"
+				"type": "string"
 			},
 			"param_p_container_name": {
 				"type": "string",
