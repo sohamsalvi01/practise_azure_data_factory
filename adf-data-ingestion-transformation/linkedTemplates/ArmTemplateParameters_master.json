@@ -26,6 +26,15 @@
 		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
 			"value": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_server": {
+			"value": "@{linkedService().param_ls_sql_server_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_database": {
+			"value": "@{linkedService().param_ls_sql_db_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_userName": {
+			"value": "@{linkedService().param_ls_sql_server_admin_name}"
+		},
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 			"value": "sql-db-server--hello-world.database.windows.net"
 		},

@@ -35,6 +35,18 @@
 			"type": "string",
 			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_sql_server_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_sql_db_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_sql_server_admin_name}"
+		},
 		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 			"type": "string",
 			"defaultValue": "sql-db-server--hello-world.database.windows.net"
@@ -122,6 +134,15 @@
 					},
 					"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
 						"value": "[parameters('ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url')]"
+					},
+					"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_server": {
+						"value": "[parameters('ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_server')]"
+					},
+					"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_database": {
+						"value": "[parameters('ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_database')]"
+					},
+					"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_userName": {
+						"value": "[parameters('ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_userName')]"
 					},
 					"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
 						"value": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server')]"
