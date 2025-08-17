@@ -5,7 +5,10 @@
 			"referenceName": "ls_sink_param__adlsg2_dalake",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"param_ls_storage_account_domain_name": "https://adlsg2datalake.dfs.core.windows.net"
+				"param_ls_storage_account_domain_name": {
+					"value": "@dataset().param_ds_adlsg2_domain_name",
+					"type": "Expression"
+				}
 			}
 		},
 		"parameters": {
