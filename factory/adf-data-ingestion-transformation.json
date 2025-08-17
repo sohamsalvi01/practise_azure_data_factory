@@ -5,6 +5,10 @@
 			"param_global__source_sql_server": {
 				"type": "string",
 				"value": "sql-db-server--hello-world"
+			},
+			"param_global__source_sql_db_name": {
+				"type": "string",
+				"value": "AzureSQL__Source "
 			}
 		}
 	},
