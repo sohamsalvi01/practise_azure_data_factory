@@ -1,12 +1,10 @@
 {
-	"name": "p7",
+	"name": "p8",
 	"properties": {
 		"activities": [
 			{
 				"name": "Copy data1",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -137,8 +135,8 @@
 				]
 			},
 			{
-				"name": "SP_ABC_NEXT_VAL",
-				"type": "Lookup",
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -148,35 +146,9 @@
 					"secureInput": false
 				},
 				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DECLARE @VAR_OP_YEAR INT\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_OP_YEAR OUTPUT\nSELECT @VAR_OP_YEAR\n",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"dataset": {
-						"referenceName": "ds_p7_source_ad_works_db",
-						"type": "DatasetReference",
-						"parameters": {
-							"param_ds_sql_server_name": {
-								"value": "@pipeline().globalParameters.param_global__source_sql_server",
-								"type": "Expression"
-							},
-							"param_ds_sql_db_name": {
-								"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
-								"type": "Expression"
-							},
-							"param_ds_sql_server_admin_name": {
-								"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
-								"type": "Expression"
-							},
-							"param_ds_sql_server_password_secret_name": {
-								"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
-								"type": "Expression"
-							}
-						}
-					}
+				"linkedServiceName": {
+					"referenceName": "ls_source__AzureSQL__Adv_works_db",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
