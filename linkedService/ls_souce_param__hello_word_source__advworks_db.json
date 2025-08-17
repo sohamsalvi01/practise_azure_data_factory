@@ -1,11 +1,47 @@
 {
 	"name": "ls_souce_param__hello_word_source__advworks_db",
 	"properties": {
+		"parameters": {
+			"param_ls_sql_server_name": {
+				"type": "string"
+			},
+			"param_ls_sql_db_name": {
+				"type": "string",
+				"defaultValue": "AzureSQL__Source "
+			},
+			"param_ls_sql_server_admin_name": {
+				"type": "string",
+				"defaultValue": "sql_server_admin"
+			},
+			"param_ls_sql_server_password_secret_name": {
+				"type": "string",
+				"defaultValue": "secret-adv-works-db-password"
+			}
+		},
+		"annotations": [],
 		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "@{linkedService().param_ls_sql_server_name}",
+			"database": "@{linkedService().param_ls_sql_db_name}",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "@{linkedService().param_ls_sql_server_admin_name}",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_project_keyvault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": {
+					"value": "@linkedService().param_ls_sql_server_password_secret_name",
+					"type": "Expression"
+				}
+			}
+		},
 		"connectVia": {
 			"referenceName": "AutoResolveIntegrationRuntime",
 			"type": "IntegrationRuntimeReference"
-		},
-		"annotations": []
+		}
 	}
 }
