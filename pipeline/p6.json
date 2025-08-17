@@ -137,7 +137,7 @@
 			},
 			"param_p_file_path": {
 				"type": "string",
-				"defaultValue": "p1/sink-raw-layer"
+				"defaultValue": "p1/source-odc-data"
 			}
 		},
 		"annotations": []
