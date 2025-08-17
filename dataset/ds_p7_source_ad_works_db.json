@@ -5,10 +5,36 @@
 			"referenceName": "ls_souce_param__hello_word_source__advworks_db",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
-				"param_ls_sql_db_name": "AzureSQL__Source ",
-				"param_ls_sql_server_admin_name": "sql_server_admin",
-				"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
+				"param_ls_sql_server_name": {
+					"value": "@dataset().param_ds_sql_server_name",
+					"type": "Expression"
+				},
+				"param_ls_sql_db_name": {
+					"value": "@dataset().param_ds_sql_db_name",
+					"type": "Expression"
+				},
+				"param_ls_sql_server_admin_name": {
+					"value": "@dataset().param_ds_sql_server_admin_name",
+					"type": "Expression"
+				},
+				"param_ls_sql_server_password_secret_name": {
+					"value": "@dataset().param_ds_sql_server_password_secret_name",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"param_ds_sql_server_name": {
+				"type": "string"
+			},
+			"param_ds_sql_db_name": {
+				"type": "string"
+			},
+			"param_ds_sql_server_admin_name": {
+				"type": "string"
+			},
+			"param_ds_sql_server_password_secret_name": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
