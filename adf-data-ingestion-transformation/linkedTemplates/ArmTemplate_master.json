@@ -23,6 +23,10 @@
 			"type": "string",
 			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
 		},
+		"ls_sink_param__adlsg2_dalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_storage_account_domain_name}"
+		},
 		"ls_sink_rbac_adlsg2_datalake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
@@ -125,6 +129,9 @@
 					},
 					"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
 						"value": "[parameters('ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url')]"
+					},
+					"ls_sink_param__adlsg2_dalake_properties_typeProperties_url": {
+						"value": "[parameters('ls_sink_param__adlsg2_dalake_properties_typeProperties_url')]"
 					},
 					"ls_sink_rbac_adlsg2_datalake_properties_typeProperties_url": {
 						"value": "[parameters('ls_sink_rbac_adlsg2_datalake_properties_typeProperties_url')]"
