@@ -60,144 +60,142 @@
 					"items": {
 						"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow",
 						"type": "Expression"
-					},
-					"activities": [
-						{
-							"name": "Copy data1",
-							"type": "Copy",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"source": {
-									"type": "AzureSqlSource",
-									"additionalColumns": [
-										{
-											"name": "abc_active_flag",
-											"value": {
-												"value": "@string('true')",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "abc_load_timestamp",
-											"value": {
-												"value": "@string(utcNow())",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "abc_adf_name",
-											"value": {
-												"value": "@pipeline().DataFactory",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "abc_pipeline_name",
-											"value": {
-												"value": "@pipeline().Pipeline",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "abc_run_id",
-											"value": {
-												"value": "@pipeline().RunId",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "abc_trigger_name",
-											"value": {
-												"value": "@pipeline().TriggerName",
-												"type": "Expression"
-											}
-										},
-										{
-											"name": "abc_trigger_time",
-											"value": {
-												"value": "@pipeline().TriggerTime",
-												"type": "Expression"
-											}
-										}
-									],
-									"sqlReaderQuery": {
-										"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE YEAR(ModifiedDate) = ', item().childitems)",
-										"type": "Expression"
-									},
-									"queryTimeout": "02:00:00",
-									"partitionOption": "None"
-								},
-								"sink": {
-									"type": "DelimitedTextSink",
-									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings",
-										"copyBehavior": "PreserveHierarchy"
-									},
-									"formatSettings": {
-										"type": "DelimitedTextWriteSettings",
-										"quoteAllText": true,
-										"fileExtension": ""
-									}
-								},
-								"enableStaging": false,
-								"translator": {
-									"type": "TabularTranslator",
-									"typeConversion": true,
-									"typeConversionSettings": {
-										"allowDataTruncation": true,
-										"treatBooleanAsNumber": false
-									}
-								}
-							},
-							"inputs": [
-								{
-									"referenceName": "ds_p7_source_ad_works_db",
-									"type": "DatasetReference",
-									"parameters": {
-										"param_ds_sql_server_name": {
-											"value": "@pipeline().globalParameters.param_global__source_sql_server",
-											"type": "Expression"
-										},
-										"param_ds_sql_db_name": {
-											"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
-											"type": "Expression"
-										},
-										"param_ds_sql_server_admin_name": {
-											"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
-											"type": "Expression"
-										},
-										"param_ds_sql_server_password_secret_name": {
-											"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
-											"type": "Expression"
-										}
-									}
-								}
-							],
-							"outputs": [
-								{
-									"referenceName": "ds_p7_target_raw_layer",
-									"type": "DatasetReference",
-									"parameters": {
-										"param_ds_year": {
-											"value": "@pipeline().parameters.param_pl_year",
-											"type": "Expression"
-										}
-									}
-								}
-							]
-						}
-					]
+					}
 				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"additionalColumns": [
+							{
+								"name": "abc_active_flag",
+								"value": {
+									"value": "@string('true')",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_load_timestamp",
+								"value": {
+									"value": "@string(utcNow())",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_adf_name",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_pipeline_name",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_run_id",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_trigger_name",
+								"value": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_trigger_time",
+								"value": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								}
+							}
+						],
+						"sqlReaderQuery": {
+							"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE YEAR(ModifiedDate) = ', item().childitems)",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ""
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_p7_source_ad_works_db",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_ds_sql_server_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server",
+								"type": "Expression"
+							},
+							"param_ds_sql_db_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_admin_name": {
+								"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_password_secret_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_p7_target_raw_layer",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_ds_year": {
+								"value": "@pipeline().parameters.param_pl_year",
+								"type": "Expression"
+							}
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
