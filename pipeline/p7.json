@@ -124,7 +124,13 @@
 				"outputs": [
 					{
 						"referenceName": "ds_p7_target_raw_layer",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"param_ds_year": {
+								"value": "@pipeline().parameters.param_pl_year",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
