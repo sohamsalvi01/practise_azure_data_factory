@@ -96,7 +96,25 @@
 				"inputs": [
 					{
 						"referenceName": "ds_p7_source_ad_works_db",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"param_ds_sql_server_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server",
+								"type": "Expression"
+							},
+							"param_ds_sql_db_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_admin_name": {
+								"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_password_secret_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
@@ -109,20 +127,16 @@
 		],
 		"parameters": {
 			"param_pl_sql_server_domain_name": {
-				"type": "string",
-				"defaultValue": "sql-db-server--hello-world.database.windows.net"
+				"type": "string"
 			},
 			"param_pl_sql_db_name": {
-				"type": "string",
-				"defaultValue": "AzureSQL__Source"
+				"type": "string"
 			},
 			"param_pl_sql_server_admin_name": {
-				"type": "string",
-				"defaultValue": "sql_server_admin"
+				"type": "string"
 			},
 			"param_pl_sql_server_password_secret_name": {
-				"type": "string",
-				"defaultValue": "secret-adv-works-db-password"
+				"type": "string"
 			}
 		},
 		"annotations": []
