@@ -139,8 +139,6 @@
 			{
 				"name": "SP_ABC_NEXT_VAL",
 				"type": "Lookup",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -153,7 +151,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DECLARE @VAR_OP_YEAR INT\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_OP_YEAR OUTPUT\nSELECT @VAR_OP_YEAR\n",
+						"sqlReaderQuery": "DECLARE @VAR_OP_YEAR INT\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_OP_YEAR OUTPUT AS var\nSELECT @VAR_OP_YEAR AS sp_var_op_year\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -184,6 +182,8 @@
 			{
 				"name": "SP_ABC_NEXT_VAL2",
 				"type": "SqlServerStoredProcedure",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
