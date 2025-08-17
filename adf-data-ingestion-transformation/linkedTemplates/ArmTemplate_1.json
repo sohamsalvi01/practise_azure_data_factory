@@ -290,11 +290,20 @@
 					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"param_ds_year": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat('address_',dataset().param_ds_year,'.csv')",
+							"type": "Expression"
+						},
 						"folderPath": "p7/target_raw_layer",
 						"fileSystem": "hello-world-pipelines"
 					},
@@ -906,14 +915,18 @@
 										}
 									}
 								],
-								"sqlReaderQuery": "SELECT TOP 1000 * FROM SALESLT.ADDRESS",
+								"sqlReaderQuery": {
+									"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE YEAR(ModifiedDate) = ', pipeline().parameters.param_pl_year)",
+									"type": "Expression"
+								},
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
 							"sink": {
 								"type": "DelimitedTextSink",
 								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
 								},
 								"formatSettings": {
 									"type": "DelimitedTextWriteSettings",
@@ -959,13 +972,28 @@
 							{
 								"referenceName": "ds_p7_target_raw_layer",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"param_ds_year": {
+										"value": "@pipeline().parameters.param_pl_year",
+										"type": "Expression"
+									}
+								}
 							}
 						]
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_pl_year": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"var_pl_year": {
+						"type": "String"
+					}
 				},
 				"annotations": []
 			},
