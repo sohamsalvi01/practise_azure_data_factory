@@ -5,6 +5,20 @@
 			"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"var_ds_filename": {
+				"type": "string",
+				"defaultValue": "people.csv"
+			},
+			"var_ds_filepath": {
+				"type": "string",
+				"defaultValue": "p1/sink-raw-layer"
+			},
+			"var_ds_container": {
+				"type": "string",
+				"defaultValue": "hello-world-pipelines"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
