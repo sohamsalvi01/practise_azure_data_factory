@@ -1,0 +1,12 @@
+{
+	"name": "adf-data-ingestion-transformation",
+	"properties": {
+		"globalParameters": {
+			"param_global__source_sql_server": {
+				"type": "string",
+				"value": "sql-db-server--hello-world"
+			}
+		}
+	},
+	"location": "northeurope"
+}
