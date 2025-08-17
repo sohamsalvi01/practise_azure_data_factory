@@ -190,11 +190,6 @@
 				"type": "string"
 			}
 		},
-		"variables": {
-			"var_pl_year": {
-				"type": "String"
-			}
-		},
 		"annotations": []
 	}
 }
