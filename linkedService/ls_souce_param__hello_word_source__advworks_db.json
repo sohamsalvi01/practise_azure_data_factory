@@ -1,0 +1,11 @@
+{
+	"name": "ls_souce_param__hello_word_source__advworks_db",
+	"properties": {
+		"type": "AzureSqlDatabase",
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		},
+		"annotations": []
+	}
+}
