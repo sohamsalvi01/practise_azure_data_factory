@@ -7,16 +7,13 @@
 		},
 		"parameters": {
 			"var_ds_filename": {
-				"type": "string",
-				"defaultValue": "people.csv"
+				"type": "string"
 			},
 			"var_ds_filepath": {
-				"type": "string",
-				"defaultValue": "p1/sink-raw-layer"
+				"type": "string"
 			},
 			"var_ds_container": {
-				"type": "string",
-				"defaultValue": "hello-world-pipelines"
+				"type": "string"
 			}
 		},
 		"annotations": [],

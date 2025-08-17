@@ -110,7 +110,21 @@
 				"inputs": [
 					{
 						"referenceName": "ds_p1_odc_source",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"var_ds_filename": {
+								"value": "@pipeline().parameters.param_p_filename",
+								"type": "Expression"
+							},
+							"var_ds_filepath": {
+								"value": "@pipeline().parameters.param_p_file_path",
+								"type": "Expression"
+							},
+							"var_ds_container": {
+								"value": "@pipeline().parameters.param_p_container_name",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
