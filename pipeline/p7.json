@@ -48,8 +48,6 @@
 			{
 				"name": "Copy data1",
 				"type": "Copy",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "SP_ABC_NEXT_VAL",
@@ -179,11 +177,27 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"param_ds_year": {
-								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.param_ds_year",
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_YEAR",
 								"type": "Expression"
 							},
 							"param_ds_adlsg2_domain_name": {
-								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.param_ds_adlsg2_domain_name",
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_ADLSG2_DOMAIN_NAME",
+								"type": "Expression"
+							},
+							"param_ds_container_name": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_CONTAINER_NAME",
+								"type": "Expression"
+							},
+							"param_ds_file_path": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_DIRECTORY_PATH",
+								"type": "Expression"
+							},
+							"param_ds_hierarchy_path": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_HIERARCHY_PATH",
+								"type": "Expression"
+							},
+							"param_ds_file_name": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_FILENAME",
 								"type": "Expression"
 							}
 						}
