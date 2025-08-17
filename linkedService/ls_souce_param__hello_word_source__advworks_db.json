@@ -3,7 +3,8 @@
 	"properties": {
 		"parameters": {
 			"param_ls_sql_server_name": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "sql-db-server--hello-world.database.windows.net"
 			},
 			"param_ls_sql_db_name": {
 				"type": "string",
