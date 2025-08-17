@@ -185,11 +185,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"param_pl_year": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
