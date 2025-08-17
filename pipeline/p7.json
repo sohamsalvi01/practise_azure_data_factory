@@ -125,20 +125,6 @@
 				]
 			}
 		],
-		"parameters": {
-			"param_pl_sql_server_domain_name": {
-				"type": "string"
-			},
-			"param_pl_sql_db_name": {
-				"type": "string"
-			},
-			"param_pl_sql_server_admin_name": {
-				"type": "string"
-			},
-			"param_pl_sql_server_password_secret_name": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
