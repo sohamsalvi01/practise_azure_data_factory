@@ -139,6 +139,8 @@
 			{
 				"name": "SP_ABC_NEXT_VAL",
 				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -176,6 +178,32 @@
 								"type": "Expression"
 							}
 						}
+					}
+				}
+			},
+			{
+				"name": "SP_ABC_NEXT_VAL2",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[SP_ABC_NEXT_VAL]"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_souce_param__hello_word_source__advworks_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
+						"param_ls_sql_db_name": "AzureSQL__Source ",
+						"param_ls_sql_server_admin_name": "sql_server_admin",
+						"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
 					}
 				}
 			}
