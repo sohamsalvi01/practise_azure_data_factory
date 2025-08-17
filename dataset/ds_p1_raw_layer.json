@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "3_test_2.csv",
-				"folderPath": "p1/sink-raw-layer",
+				"folderPath": "p2/target_raw_layer/",
 				"fileSystem": "hello-world-pipelines"
 			},
 			"columnDelimiter": ",",
