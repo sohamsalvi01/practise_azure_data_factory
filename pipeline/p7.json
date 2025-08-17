@@ -120,7 +120,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_p1_raw_layer",
+						"referenceName": "ds_p7_target_raw_layer",
 						"type": "DatasetReference"
 					}
 				]
