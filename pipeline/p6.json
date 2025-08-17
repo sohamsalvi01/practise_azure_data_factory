@@ -1,0 +1,140 @@
+{
+	"name": "p6",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"additionalColumns": [
+							{
+								"name": "abc_file_path",
+								"value": "$$FILEPATH"
+							},
+							{
+								"name": "abc_file_name",
+								"value": "$$FILENAME"
+							},
+							{
+								"name": "abc_active_flag",
+								"value": {
+									"value": "@string('true')",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_load_timestamp",
+								"value": {
+									"value": "@string(utcNow())",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_adf_name",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_pipeline_name",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_run_id",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_trigger_name",
+								"value": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_trigger_time",
+								"value": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								}
+							}
+						],
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "FlattenHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ""
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_p1_odc_source",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_p1_raw_layer",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"variables": {
+			"var_p_filepath": {
+				"type": "String",
+				"defaultValue": "p1/sink-raw-layer"
+			},
+			"var_p_fileame": {
+				"type": "String",
+				"defaultValue": "1.csv"
+			},
+			"var-p_containername": {
+				"type": "String",
+				"defaultValue": "hello-world-pipelines"
+			}
+		},
+		"annotations": []
+	}
+}
