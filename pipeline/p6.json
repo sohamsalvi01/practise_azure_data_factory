@@ -130,7 +130,7 @@
 				"type": "string",
 				"defaultValue": "hello-world-pipelines"
 			},
-			"param_file_path": {
+			"param_p_file_path": {
 				"type": "string",
 				"defaultValue": "p1/sink-raw-layer"
 			}
