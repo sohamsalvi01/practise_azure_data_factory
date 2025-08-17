@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "DECLARE @VAR_OP_YEAR INT\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_OP_YEAR OUTPUT\nSELECT @VAR_OP_YEAR AS sp_var_op_year\n",
+						"sqlReaderQuery": "DECLARE \n    @VAR_LOOKUP_YEAR INT,\n    @VAR_LOOKUP_ADLSG2_DOMAIN_NAME VARCHAR(200),\n    @VAR_LOOKUP_CONTAINER_NAME VARCHAR(200),\n    @VAR_LOOKUP_DIRECTORY_PATH VARCHAR(200),\n    @VAR_LOOKUP_HIERARCHY_PATH VARCHAR(200),\n    @VAR_LOOKUP_FILENAME VARCHAR(200)\n\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_OP_YEAR OUTPUT, @VAR_LOOKUP_ADLSG2_DOMAIN_NAME OUTPUT, @VAR_LOOKUP_CONTAINER_NAME OUTPUT, @VAR_LOOKUP_DIRECTORY_PATH OUTPUT, @VAR_LOOKUP_HIERARCHY_PATH OUTPUT, @VAR_LOOKUP_FILENAME OUTPUT\n\nSELECT @VAR_OP_YEAR, @VAR_LOOKUP_ADLSG2_DOMAIN_NAME, @VAR_LOOKUP_CONTAINER_NAME, @VAR_LOOKUP_DIRECTORY_PATH, @VAR_LOOKUP_HIERARCHY_PATH, @VAR_LOOKUP_FILENAME\n\n",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -178,6 +178,10 @@
 						"parameters": {
 							"param_ds_year": {
 								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.sp_var_op_year",
+								"type": "Expression"
+							},
+							"param_ds_adlsg2_domain_name": {
+								"value": "@pipeline().globalParameters.param_global__sink_adlsg2_datalake",
 								"type": "Expression"
 							}
 						}
