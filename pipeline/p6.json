@@ -70,7 +70,12 @@
 						],
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"recursive": false,
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(pipeline().parameters.param_p_file_path,'/*')",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -137,7 +142,7 @@
 			},
 			"param_p_file_path": {
 				"type": "string",
-				"defaultValue": "p1/source-odc-data"
+				"defaultValue": "p2/source_odc_data"
 			}
 		},
 		"annotations": []
