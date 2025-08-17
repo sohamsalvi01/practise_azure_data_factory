@@ -623,9 +623,59 @@
 			"properties": {
 				"activities": [
 					{
+						"name": "SP_ABC_NEXT_VAL",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "DECLARE @VAR_OP_YEAR INT\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_OP_YEAR OUTPUT\nSELECT @VAR_OP_YEAR AS sp_var_op_year\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_p7_source_ad_works_db",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_ds_sql_server_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_server",
+										"type": "Expression"
+									},
+									"param_ds_sql_db_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
+										"type": "Expression"
+									},
+									"param_ds_sql_server_admin_name": {
+										"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
+										"type": "Expression"
+									},
+									"param_ds_sql_server_password_secret_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					},
+					{
 						"name": "Copy data1",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "SP_ABC_NEXT_VAL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -689,7 +739,7 @@
 									}
 								],
 								"sqlReaderQuery": {
-									"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE YEAR(ModifiedDate) = ', pipeline().parameters.param_pl_year)",
+									"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRESS WHERE YEAR(ModifiedDate) = ', activity('SP_ABC_NEXT_VAL').output.firstRow.sp_var_op_year)",
 									"type": "Expression"
 								},
 								"queryTimeout": "02:00:00",
@@ -747,7 +797,7 @@
 								"type": "DatasetReference",
 								"parameters": {
 									"param_ds_year": {
-										"value": "@pipeline().parameters.param_pl_year",
+										"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.sp_var_op_year",
 										"type": "Expression"
 									}
 								}
@@ -757,16 +807,6 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_pl_year": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"var_pl_year": {
-						"type": "String"
-					}
 				},
 				"annotations": []
 			},
