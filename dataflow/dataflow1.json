@@ -13,12 +13,24 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
+				"source(output(",
+				"          employee as (department as (id as string, manager as (contact as (email as string, phone as string), id as string, name as string), name as string), id as string, name as string, position as string, projects as (projectId as string, projectName as string, startDate as date, tasks as (details as (completionDate as date, expectedCompletion as string, hoursSpent as short, technologiesUsed as string[]), status as string, taskId as string, title as string)[])[])",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'singleDocument') ~> ExampleJSONFiles"
+				"     documentForm: 'singleDocument') ~> ExampleJSONFiles",
+				"ExampleJSONFiles select(mapColumn(",
+				"          employee",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
