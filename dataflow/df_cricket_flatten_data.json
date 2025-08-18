@@ -35,7 +35,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'singleDocument') ~> StageFileData",
+				"     documentForm: 'arrayOfDocuments') ~> StageFileData",
 				"StageFileData foldDown(unrollMultiple(info.dates,info.officials.match_referees,info.officials.reserve_umpires,info.officials.tv_umpires,info.officials.umpires),",
 				"     mapColumn(",
 				"          balls_per_over = info.balls_per_over,",
