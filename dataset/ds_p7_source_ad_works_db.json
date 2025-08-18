@@ -82,7 +82,7 @@
 		],
 		"typeProperties": {
 			"schema": "SalesLT",
-			"table": "Address"
+			"table": "Address231"
 		}
 	}
 }
