@@ -82,7 +82,10 @@
 		],
 		"typeProperties": {
 			"schema": "SalesLT",
-			"table": "Address231"
+			"table": {
+				"value": "@dataset().param_ds_sql_db_name",
+				"type": "Expression"
+			}
 		}
 	}
 }
