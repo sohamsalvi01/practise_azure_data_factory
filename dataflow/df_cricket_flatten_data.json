@@ -52,7 +52,6 @@
 				"          outcome = info.outcome,",
 				"          overs = info.overs,",
 				"          player_of_match = info.player_of_match,",
-				"          players = info.players,",
 				"          registry = info.registry,",
 				"          season = info.season,",
 				"          team_type = info.team_type,",
