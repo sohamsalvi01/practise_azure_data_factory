@@ -205,28 +205,6 @@
 				]
 			},
 			{
-				"name": "Stored procedure1",
-				"type": "SqlServerStoredProcedure",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
-				"dependsOn": [
-					{
-						"activity": "Copy data1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": []
-			},
-			{
 				"name": "Log Failure",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
@@ -362,6 +340,216 @@
 						},
 						"ROWS_COPIED": {
 							"value": null,
+							"type": "Int32"
+						},
+						"ROWS_READ": {
+							"value": {
+								"value": "@activity('Copy data1').output.rowsRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"RUN_ID": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SINK_PEAK_CONNECTIONS": {
+							"value": {
+								"value": "@activity('Copy data1').output.sinkPeakConnections",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"SOURCE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Source",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SOURCE_PEAK_CONNECTIONS": {
+							"value": {
+								"value": "@activity('Copy data1').output.sourcePeakConnections",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"STACK_TRACE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].StackTrace",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TRIGGER_NAME": {
+							"value": {
+								"value": "@pipeline().TriggerName",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TRIGGER_TIME": {
+							"value": {
+								"value": "@pipeline().TriggerTime",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_souce_param__hello_word_source__advworks_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
+						"param_ls_sql_db_name": "AzureSQL__Source ",
+						"param_ls_sql_server_admin_name": "sql_server_admin",
+						"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
+					}
+				}
+			},
+			{
+				"name": "Log Failure_copy1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[USP_ABC_PIPELINE_LOG_STATUS]",
+					"storedProcedureParameters": {
+						"CATEGORY": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Category",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"COPY_DURATION": {
+							"value": {
+								"value": "@activity('Copy data1').output.copyDuration",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"DATA": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Data",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DATA_FACTORY_NAME": {
+							"value": {
+								"value": "@pipeline().DataFactory",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DATA_READ": {
+							"value": {
+								"value": "@activity('Copy data1').output.dataRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"DATA_WRITTEN": {
+							"value": {
+								"value": "@activity('Copy data1').output.dataWritten",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"ERROR_CODE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Code",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ERROR_MESSAGE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Message",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"EVENT_TYPE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].EventType",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"EXECEPTION_TYPE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].ExceptionType",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"FILLES_WRITTEN": {
+							"value": {
+								"value": "@activity('Copy data1').output.filesWritten",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"INNER_EVENT_INFOS": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].InnerEventInfos",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"MESSAGE_ID": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].MsgId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_ID": {
+							"value": {
+								"value": "@pipeline().GroupId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_NAME": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_STATUS": {
+							"value": {
+								"value": "@string('FAIL')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ROWS_COPIED": {
+							"value": {
+								"value": "@activity('Copy data1').output.rowsCopied",
+								"type": "Expression"
+							},
 							"type": "Int32"
 						},
 						"ROWS_READ": {
