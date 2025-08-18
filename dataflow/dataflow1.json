@@ -28,7 +28,6 @@
 				"     documentForm: 'arrayOfDocuments') ~> ExampleJSONFiles",
 				"ExampleJSONFiles foldDown(unroll(employee.projects.tasks.details.technologiesUsed),",
 				"     mapColumn(",
-				"          department = employee.department,",
 				"          id = employee.id,",
 				"          name = employee.name,",
 				"          position = employee.position,",
