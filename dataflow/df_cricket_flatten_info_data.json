@@ -12,20 +12,8 @@
 					"name": "StageFileData"
 				}
 			],
-			"sinks": [
-				{
-					"dataset": {
-						"referenceName": "ds_p8_target_flatten_cricket_files",
-						"type": "DatasetReference"
-					},
-					"name": "FlattenInfoOutputCsv"
-				}
-			],
-			"transformations": [
-				{
-					"name": "FlattenInfo"
-				}
-			],
+			"sinks": [],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          meta as (data_version as string, created as string, revision as integer),",
@@ -35,39 +23,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> StageFileData",
-				"StageFileData foldDown(unrollMultiple(info.dates,info.officials.match_referees,info.officials.reserve_umpires,info.officials.tv_umpires,info.officials.umpires),",
-				"     mapColumn(",
-				"          balls_per_over = info.balls_per_over,",
-				"          city = info.city,",
-				"          dates = info.dates,",
-				"          event = info.event,",
-				"          gender = info.gender,",
-				"          match_type = info.match_type,",
-				"          match_type_number = info.match_type_number,",
-				"          match_referees = info.officials.match_referees,",
-				"          reserve_umpires = info.officials.reserve_umpires,",
-				"          tv_umpires = info.officials.tv_umpires,",
-				"          umpires = info.officials.umpires,",
-				"          outcome = info.outcome,",
-				"          overs = info.overs,",
-				"          player_of_match = info.player_of_match,",
-				"          registry = info.registry,",
-				"          season = info.season,",
-				"          team_type = info.team_type,",
-				"          teams = info.teams,",
-				"          toss = info.toss,",
-				"          venue = info.venue",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
-				"FlattenInfo sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> FlattenInfoOutputCsv"
+				"     documentForm: 'arrayOfDocuments') ~> StageFileData"
 			]
 		}
 	}

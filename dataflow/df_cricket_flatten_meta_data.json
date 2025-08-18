@@ -13,11 +13,7 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [
-				{
-					"name": "flatten1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          meta as (data_version as string, created as string, revision as integer),",
@@ -27,14 +23,7 @@
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> StageFileData",
-				"StageFileData foldDown(unrollMultiple(info.players.{South Africa},info.players.Australia),",
-				"     mapColumn(",
-				"          {South Africa} = info.players.{South Africa},",
-				"          Australia = info.players.Australia",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1"
+				"     documentForm: 'arrayOfDocuments') ~> StageFileData"
 			]
 		}
 	}
