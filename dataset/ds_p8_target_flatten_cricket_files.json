@@ -1,0 +1,23 @@
+{
+	"name": "ds_p8_target_flatten_cricket_files",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "p8/target_raw_flatten_files",
+				"fileSystem": "hello-world-pipelines"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
