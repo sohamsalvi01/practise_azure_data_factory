@@ -249,7 +249,10 @@
 					"storedProcedureName": "[dbo].[USP_ABC_PIPELINE_LOG_STATUS]",
 					"storedProcedureParameters": {
 						"CATEGORY": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Category",
+								"type": "Expression"
+							},
 							"type": "Int32"
 						},
 						"COPY_DURATION": {
@@ -260,7 +263,10 @@
 							"type": "Int32"
 						},
 						"DATA": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Data",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"DATA_FACTORY_NAME": {
@@ -299,11 +305,17 @@
 							"type": "String"
 						},
 						"EVENT_TYPE": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].EventType",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"EXECEPTION_TYPE": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].ExceptionType",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"FILLES_WRITTEN": {
@@ -314,11 +326,17 @@
 							"type": "Int32"
 						},
 						"INNER_EVENT_INFOS": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].InnerEventInfos",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"MESSAGE_ID": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].MsgId",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"PIPELINE_ID": {
@@ -368,7 +386,10 @@
 							"type": "Int32"
 						},
 						"SOURCE": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Source",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"SOURCE_PEAK_CONNECTIONS": {
@@ -379,7 +400,10 @@
 							"type": "Int32"
 						},
 						"STACK_TRACE": {
-							"value": null,
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].StackTrace",
+								"type": "Expression"
+							},
 							"type": "String"
 						},
 						"TRIGGER_NAME": {
