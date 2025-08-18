@@ -25,7 +25,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'singleDocument') ~> ExampleJSONFiles",
+				"     documentForm: 'arrayOfDocuments') ~> ExampleJSONFiles",
 				"ExampleJSONFiles select(mapColumn(",
 				"          employee",
 				"     ),",

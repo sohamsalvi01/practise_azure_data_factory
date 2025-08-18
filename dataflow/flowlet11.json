@@ -1,0 +1,35 @@
+{
+	"name": "flowlet11",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "ExampleJSONFiles"
+				}
+			],
+			"scriptLines": [
+				"input(output(",
+				"          employee as (department as (id as string, manager as (contact as (email as string, phone as string), id as string, name as string), name as string), id as string, name as string, position as string, projects as (projectId as string, projectName as string, startDate as date, tasks as (details as (completionDate as date, expectedCompletion as string, hoursSpent as short, technologiesUsed as string[]), status as string, taskId as string, title as string)[])[])",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> ExampleJSONFiles",
+				"ExampleJSONFiles foldDown(unroll(employee.projects.tasks.details.technologiesUsed),",
+				"     mapColumn(",
+				"          id = employee.id,",
+				"          name = employee.name,",
+				"          position = employee.position,",
+				"          department_id = employee.department.id,",
+				"          project_id = employee.projects.projectId",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
+			]
+		}
+	}
+}
