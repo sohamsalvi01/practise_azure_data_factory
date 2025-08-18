@@ -516,7 +516,7 @@
 						},
 						"PIPELINE_STATUS": {
 							"value": {
-								"value": "@string('FAIL')",
+								"value": "@string('SUCCESS')",
 								"type": "Expression"
 							},
 							"type": "String"
