@@ -35,8 +35,8 @@
 				"          created = meta.created,",
 				"          revision = meta.revision",
 				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1"
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> flatten1"
 			]
 		}
 	}
