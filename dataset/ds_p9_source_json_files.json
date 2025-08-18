@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "file_100kb.json",
 				"folderPath": "p9/source_souce_sample_files",
 				"fileSystem": "hello-world-pipelines"
 			}
