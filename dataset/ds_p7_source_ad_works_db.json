@@ -2,26 +2,8 @@
 	"name": "ds_p7_source_ad_works_db",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_souce_param__hello_word_source__advworks_db",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"param_ls_sql_server_name": {
-					"value": "@dataset().param_ds_sql_server_name",
-					"type": "Expression"
-				},
-				"param_ls_sql_db_name": {
-					"value": "@dataset().param_ds_sql_db_name",
-					"type": "Expression"
-				},
-				"param_ls_sql_server_admin_name": {
-					"value": "@dataset().param_ds_sql_server_admin_name",
-					"type": "Expression"
-				},
-				"param_ls_sql_server_password_secret_name": {
-					"value": "@dataset().param_ds_sql_server_password_secret_name",
-					"type": "Expression"
-				}
-			}
+			"referenceName": "ls_source__AzureSQL__Adv_works_db",
+			"type": "LinkedServiceReference"
 		},
 		"parameters": {
 			"param_ds_sql_server_name": {
@@ -81,11 +63,8 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "SalesLT",
-			"table": {
-				"value": "@dataset().param_ds_sql_db_name",
-				"type": "Expression"
-			}
+			"schema": "TEST",
+			"table": "FAIL"
 		}
 	}
 }
