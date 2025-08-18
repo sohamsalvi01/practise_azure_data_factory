@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "FlattenInfo"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          meta as (data_version as string, created as string, revision as integer),",
@@ -23,7 +27,33 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> StageFileData"
+				"     documentForm: 'singleDocument') ~> StageFileData",
+				"StageFileData foldDown(unrollMultiple(info.dates,info.officials.match_referees,info.officials.reserve_umpires,info.officials.tv_umpires,info.officials.umpires),",
+				"     mapColumn(",
+				"          balls_per_over = info.balls_per_over,",
+				"          city = info.city,",
+				"          dates = info.dates,",
+				"          event = info.event,",
+				"          gender = info.gender,",
+				"          match_type = info.match_type,",
+				"          match_type_number = info.match_type_number,",
+				"          match_referees = info.officials.match_referees,",
+				"          reserve_umpires = info.officials.reserve_umpires,",
+				"          tv_umpires = info.officials.tv_umpires,",
+				"          umpires = info.officials.umpires,",
+				"          outcome = info.outcome,",
+				"          overs = info.overs,",
+				"          player_of_match = info.player_of_match,",
+				"          players = info.players,",
+				"          registry = info.registry,",
+				"          season = info.season,",
+				"          team_type = info.team_type,",
+				"          teams = info.teams,",
+				"          toss = info.toss,",
+				"          venue = info.venue",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
 			]
 		}
 	}
