@@ -26,7 +26,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'arrayOfDocuments') ~> ExampleJSONFiles",
-				"ExampleJSONFiles foldDown(unroll(employee.projects.tasks.details.technologiesUsed),",
+				"ExampleJSONFiles foldDown(unroll(),",
 				"     mapColumn(",
 				"          id = employee.id,",
 				"          name = employee.name,",
