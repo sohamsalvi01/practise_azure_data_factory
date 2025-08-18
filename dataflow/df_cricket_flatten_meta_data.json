@@ -27,7 +27,7 @@
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> StageFileData",
+				"     documentForm: 'singleDocument') ~> StageFileData",
 				"StageFileData foldDown(unroll(),",
 				"     mapColumn(",
 				"          meta = meta.data_version,",
