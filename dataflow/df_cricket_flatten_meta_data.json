@@ -1,5 +1,5 @@
 {
-	"name": "df_cricket_flatten_innings_data",
+	"name": "df_cricket_flatten_meta_data",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -30,7 +30,9 @@
 				"     documentForm: 'arrayOfDocuments') ~> StageFileData",
 				"StageFileData foldDown(unroll(),",
 				"     mapColumn(",
-				"          meta",
+				"          meta = meta.data_version,",
+				"          created = meta.created,",
+				"          revision = meta.revision",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenMetaData"
