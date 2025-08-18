@@ -18,7 +18,7 @@
 				"source(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'documentPerLine') ~> ExampleJSONFiles"
+				"     documentForm: 'singleDocument') ~> ExampleJSONFiles"
 			]
 		}
 	}
