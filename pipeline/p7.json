@@ -434,10 +434,7 @@
 					"storedProcedureName": "[dbo].[USP_ABC_PIPELINE_LOG_STATUS]",
 					"storedProcedureParameters": {
 						"CATEGORY": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].Category",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "Int32"
 						},
 						"COPY_DURATION": {
@@ -448,10 +445,7 @@
 							"type": "Int32"
 						},
 						"DATA": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].Data",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"DATA_FACTORY_NAME": {
@@ -476,31 +470,19 @@
 							"type": "Int32"
 						},
 						"ERROR_CODE": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].Code",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"ERROR_MESSAGE": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].Message",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"EVENT_TYPE": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].EventType",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"EXECEPTION_TYPE": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].ExceptionType",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"FILLES_WRITTEN": {
@@ -511,17 +493,11 @@
 							"type": "Int32"
 						},
 						"INNER_EVENT_INFOS": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].InnerEventInfos",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"MESSAGE_ID": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].MsgId",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"PIPELINE_ID": {
@@ -574,10 +550,7 @@
 							"type": "Int32"
 						},
 						"SOURCE": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].Source",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"SOURCE_PEAK_CONNECTIONS": {
@@ -588,10 +561,7 @@
 							"type": "Int32"
 						},
 						"STACK_TRACE": {
-							"value": {
-								"value": "@activity('Copy data1').output.errors[0].StackTrace",
-								"type": "Expression"
-							},
+							"value": null,
 							"type": "String"
 						},
 						"TRIGGER_NAME": {
