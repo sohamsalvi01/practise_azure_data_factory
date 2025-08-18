@@ -242,7 +242,7 @@
 						},
 						"DATA": {
 							"value": {
-								"value": "@activity('Copy data1').output.errors[0].Data",
+								"value": "@string(activity('Copy data1').output.errors[0].Data)",
 								"type": "Expression"
 							},
 							"type": "String"
@@ -305,7 +305,7 @@
 						},
 						"INNER_EVENT_INFOS": {
 							"value": {
-								"value": "@activity('Copy data1').output.errors[0].InnerEventInfos",
+								"value": "@string(activity('Copy data1').output.errors[0].InnerEventInfos)",
 								"type": "Expression"
 							},
 							"type": "String"
