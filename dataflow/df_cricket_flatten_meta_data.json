@@ -15,7 +15,7 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "FlattenMetaData"
+					"name": "flatten1"
 				}
 			],
 			"scriptLines": [
@@ -30,12 +30,13 @@
 				"     documentForm: 'singleDocument') ~> StageFileData",
 				"StageFileData foldDown(unroll(),",
 				"     mapColumn(",
-				"          meta = meta.data_version,",
+				"          meta,",
+				"          data_version = meta.data_version,",
 				"          created = meta.created,",
 				"          revision = meta.revision",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenMetaData"
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
 			]
 		}
 	}
