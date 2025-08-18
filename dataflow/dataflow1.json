@@ -15,7 +15,7 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "select1"
+					"name": "flatten1"
 				}
 			],
 			"scriptLines": [
@@ -26,11 +26,17 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'arrayOfDocuments') ~> ExampleJSONFiles",
-				"ExampleJSONFiles select(mapColumn(",
-				"          employee",
+				"ExampleJSONFiles foldDown(unroll(employee.projects.tasks.details.technologiesUsed),",
+				"     mapColumn(",
+				"          department = employee.department,",
+				"          id = employee.id,",
+				"          name = employee.name,",
+				"          position = employee.position,",
+				"          department_id = employee.department.id,",
+				"          project_id = employee.projects.projectId",
 				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
 			]
 		}
 	}
