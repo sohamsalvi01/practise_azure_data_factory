@@ -39,7 +39,9 @@
 				"          match_number = info.event.match_number,",
 				"          gender = info.gender,",
 				"          match_type = info.match_type,",
-				"          match_type_number = info.match_type_number",
+				"          match_type_number = info.match_type_number,",
+				"          winner = info.outcome.winner,",
+				"          runs = info.outcome.by.runs",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1"
