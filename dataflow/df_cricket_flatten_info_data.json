@@ -19,6 +19,9 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "parse1"
 				}
 			],
 			"scriptLines": [
@@ -44,7 +47,8 @@
 				"          gender = info.gender,",
 				"          match_type = info.match_type,",
 				"          match_type_number = info.match_type_number,",
-				"          outcome = info.outcome,",
+				"          outcome = info.outcome.winner,",
+				"          by = info.outcome.by,",
 				"          overs = info.overs,",
 				"          season = info.season,",
 				"          team_type = info.team_type,",
@@ -58,7 +62,10 @@
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
 				"flatten1 derive(outcome = toString(outcome),",
 				"          teams = toString(teams),",
-				"          player_of_match = toString(player_of_match)) ~> derivedColumn1"
+				"          player_of_match = toString(player_of_match)) ~> derivedColumn1",
+				"derivedColumn1 parse(outcome = ERROR_FUNCTION(''),",
+				"     format: 'json',",
+				"     documentForm: 'documentPerLine') ~> parse1"
 			]
 		}
 	}
