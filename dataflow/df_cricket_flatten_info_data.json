@@ -61,7 +61,7 @@
 				"          gender = info.gender,",
 				"          match_type = info.match_type,",
 				"          match_type_number = info.match_type_number,",
-				"          outcome = info.outcome,",
+				"          outcome = info.outcome.winner,",
 				"          overs = info.overs,",
 				"          season = info.season,",
 				"          team_type = info.team_type,",
