@@ -69,7 +69,7 @@
 				"          player_of_match2 = player_of_match[2],",
 				"          by_wickets = at(array(by),1),",
 				"          by_run = array(by),",
-				"          by_run2 = toSting(array(by))) ~> DelistArrayColumns",
+				"          by_run2 = toString(array(by))) ~> DelistArrayColumns",
 				"parse1 foldDown(unroll(),",
 				"     mapColumn(",
 				"          data_version,",
