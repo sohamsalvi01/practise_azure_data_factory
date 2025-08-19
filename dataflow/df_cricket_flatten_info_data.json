@@ -12,13 +12,24 @@
 					"name": "StageFileData"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_p8_target_flatten_cricket_files",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "FlattenInfo"
 				},
 				{
 					"name": "DelistArrayColumns"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -62,7 +73,44 @@
 				"          player_of_match1 = player_of_match[1],",
 				"          player_of_match2 = player_of_match[2],",
 				"          win_by = replace(replace(split(toString(by),':')[1],'\"',''),'{',''),",
-				"          win_by_wickets_or_runs = replace(replace(split(toString(by),':')[2],'\"',''),'}','')) ~> DelistArrayColumns"
+				"          win_by_wickets_or_runs = replace(replace(split(toString(by),':')[2],'\"',''),'}','')) ~> DelistArrayColumns",
+				"DelistArrayColumns select(mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          balls_per_over,",
+				"          city,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          gender,",
+				"          match_type,",
+				"          match_type_number,",
+				"          outcome,",
+				"          overs,",
+				"          season,",
+				"          team_type,",
+				"          toss,",
+				"          decision,",
+				"          venue,",
+				"          teams,",
+				"          player_of_match,",
+				"          teams1,",
+				"          teams2,",
+				"          player_of_match1,",
+				"          player_of_match2,",
+				"          win_by,",
+				"          win_by_wickets_or_runs",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
