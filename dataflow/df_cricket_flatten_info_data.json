@@ -56,8 +56,9 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(teams = toString(teams),",
-				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1"
+				"flatten1 derive(outcome = toString(outcome),",
+				"          teams = toString(teams),",
+				"          player_of_match = toString(player_of_match)) ~> derivedColumn1"
 			]
 		}
 	}
