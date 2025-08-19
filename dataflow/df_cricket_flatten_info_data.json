@@ -61,7 +61,8 @@
 				"          teams2 = teams[2],",
 				"          player_of_match1 = player_of_match[1],",
 				"          player_of_match2 = player_of_match[2],",
-				"          outcome_by = split(toString(by),':')[1]) ~> DelistArrayColumns"
+				"          outcome_by = split(toString(by),':')[1],",
+				"          outcome_by_number = split(toString(by),':')[2]) ~> DelistArrayColumns"
 			]
 		}
 	}
