@@ -86,8 +86,8 @@
 				"          teams,",
 				"          player_of_match",
 				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten2"
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> flatten2"
 			]
 		}
 	}
