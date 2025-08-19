@@ -44,18 +44,20 @@
 				"          gender = info.gender,",
 				"          match_type = info.match_type,",
 				"          match_type_number = info.match_type_number,",
-				"          outcome = info.outcome.winner,",
+				"          outcome = info.outcome,",
 				"          overs = info.overs,",
 				"          season = info.season,",
 				"          team_type = info.team_type,",
 				"          toss = info.toss.winner,",
 				"          decision = info.toss.decision,",
 				"          venue = info.venue,",
-				"          teams = info.teams",
+				"          teams = info.teams,",
+				"          player_of_match = info.player_of_match",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(teams = toString(teams)) ~> derivedColumn1"
+				"flatten1 derive(teams = toString(teams),",
+				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1"
 			]
 		}
 	}
