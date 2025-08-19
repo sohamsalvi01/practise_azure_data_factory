@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "1384402.json",
 				"folderPath": "p8/source_cricket_json_files",
 				"fileSystem": "hello-world-pipelines"
 			}

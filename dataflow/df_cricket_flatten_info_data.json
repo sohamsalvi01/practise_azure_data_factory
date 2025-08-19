@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          meta as (data_version as string, created as string, revision as integer),",
@@ -23,7 +27,14 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> StageFileData"
+				"     documentForm: 'arrayOfDocuments') ~> StageFileData",
+				"StageFileData select(mapColumn(",
+				"          meta,",
+				"          info,",
+				"          innings",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
