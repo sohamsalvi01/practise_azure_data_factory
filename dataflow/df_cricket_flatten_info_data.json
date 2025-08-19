@@ -28,7 +28,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unroll(info.dates),",
+				"StageFileData foldDown(unrollMultiple(info.dates,info.teams),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
@@ -47,7 +47,8 @@
 				"          team_type = info.team_type,",
 				"          toss = info.toss.winner,",
 				"          decision = info.toss.decision,",
-				"          venue = info.venue",
+				"          venue = info.venue,",
+				"          teams = info.teams",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1"
