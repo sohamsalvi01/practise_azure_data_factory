@@ -19,9 +19,6 @@
 				},
 				{
 					"name": "derivedColumn1"
-				},
-				{
-					"name": "stringify1"
 				}
 			],
 			"scriptLines": [
@@ -60,11 +57,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"stringify1 derive(by = toString(by),",
-				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1",
-				"flatten1 stringify(teams1 = teams[0] ? string,",
-				"          teams2 = teams[1] ? string,",
-				"     format: 'json') ~> stringify1"
+				"flatten1 derive(teams = teams[0]) ~> derivedColumn1"
 			]
 		}
 	}
