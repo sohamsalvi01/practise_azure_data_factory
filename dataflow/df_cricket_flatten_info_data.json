@@ -60,9 +60,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(outcome = toString(outcome),",
-				"          teams = toString(teams),",
-				"          player_of_match = toString(player_of_match)) ~> derivedColumn1",
+				"flatten1 derive(column2 = ERROR_FUNCTION('')) ~> derivedColumn1",
 				"derivedColumn1 parse(outcome = ERROR_FUNCTION(''),",
 				"     format: 'json',",
 				"     documentForm: 'documentPerLine') ~> parse1"
