@@ -21,7 +21,7 @@
 					"name": "derivedColumn1"
 				},
 				{
-					"name": "flatten2"
+					"name": "stringify1"
 				}
 			],
 			"scriptLines": [
@@ -60,34 +60,11 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten2 derive(by = toString(by),",
+				"stringify1 derive(by = toString(by),",
 				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1",
-				"flatten1 foldDown(unrollMultiple(teams,player_of_match),",
-				"     mapColumn(",
-				"          data_version,",
-				"          created,",
-				"          revision,",
-				"          balls_per_over,",
-				"          city,",
-				"          dates,",
-				"          event,",
-				"          match_number,",
-				"          gender,",
-				"          match_type,",
-				"          match_type_number,",
-				"          outcome,",
-				"          by,",
-				"          overs,",
-				"          season,",
-				"          team_type,",
-				"          toss,",
-				"          decision,",
-				"          venue,",
-				"          teams,",
-				"          player_of_match",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> flatten2"
+				"flatten1 stringify(teams1 = teams[0] ? string,",
+				"          teams2 = teams[1] ? string,",
+				"     format: 'json') ~> stringify1"
 			]
 		}
 	}
