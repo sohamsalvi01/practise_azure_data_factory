@@ -49,7 +49,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"StageFileData foldDown(unrollMultiple(info.dates,info.player_of_match,info.teams),",
+				"StageFileData foldDown(unroll(info.dates),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
