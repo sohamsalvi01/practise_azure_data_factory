@@ -55,8 +55,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(teams = ERROR_FUNCTION(''),",
-				"          teams2 = toString(teams)) ~> derivedColumn1"
+				"flatten1 derive(teams = toString(teams)) ~> derivedColumn1"
 			]
 		}
 	}
