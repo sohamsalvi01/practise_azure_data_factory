@@ -22,9 +22,6 @@
 				},
 				{
 					"name": "flatten1"
-				},
-				{
-					"name": "parse1"
 				}
 			],
 			"scriptLines": [
@@ -70,7 +67,7 @@
 				"          by_wickets = at(array(by),1),",
 				"          by_run = array(by),",
 				"          by_run2 = toString(array(by))) ~> DelistArrayColumns",
-				"parse1 foldDown(unroll(),",
+				"DelistArrayColumns foldDown(unroll(by_run),",
 				"     mapColumn(",
 				"          data_version,",
 				"          created,",
@@ -98,13 +95,11 @@
 				"          player_of_match1,",
 				"          player_of_match2,",
 				"          by_wickets,",
-				"          by_run",
+				"          by_run,",
+				"          by_run2",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"DelistArrayColumns parse(by = ERROR_FUNCTION(''),",
-				"     format: 'json',",
-				"     documentForm: 'documentPerLine') ~> parse1"
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
 			]
 		}
 	}
