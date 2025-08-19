@@ -19,6 +19,12 @@
 				},
 				{
 					"name": "DelistArrayColumns"
+				},
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "parse1"
 				}
 			],
 			"scriptLines": [
@@ -61,8 +67,43 @@
 				"          teams2 = teams[2],",
 				"          player_of_match1 = player_of_match[1],",
 				"          player_of_match2 = player_of_match[2],",
-				"          by_wickets = ['wickets'][2],",
-				"          by_run = split(toString(by), ':')[1]) ~> DelistArrayColumns"
+				"          by_wickets = at(array(by),1),",
+				"          by_run = at(array(by),2)) ~> DelistArrayColumns",
+				"parse1 foldDown(unroll(),",
+				"     mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          balls_per_over,",
+				"          city,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          gender,",
+				"          match_type,",
+				"          match_type_number,",
+				"          outcome,",
+				"          by,",
+				"          overs,",
+				"          season,",
+				"          team_type,",
+				"          toss,",
+				"          decision,",
+				"          venue,",
+				"          teams,",
+				"          player_of_match,",
+				"          teams1,",
+				"          teams2,",
+				"          player_of_match1,",
+				"          player_of_match2,",
+				"          by_wickets,",
+				"          by_run",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"DelistArrayColumns parse(by = ERROR_FUNCTION(''),",
+				"     format: 'json',",
+				"     documentForm: 'documentPerLine') ~> parse1"
 			]
 		}
 	}
