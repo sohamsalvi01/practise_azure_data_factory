@@ -1,5 +1,5 @@
 {
-	"name": "df_cricket_flatten_meta_data",
+	"name": "df_cricket_flatten_players",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          meta as (data_version as string, created as string, revision as integer),",
@@ -23,7 +27,20 @@
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'arrayOfDocuments') ~> StageFileData"
+				"     documentForm: 'arrayOfDocuments') ~> StageFileData",
+				"StageFileData foldDown(unroll(info.players.{South Africa}),",
+				"     mapColumn(",
+				"          meta = meta.data_version,",
+				"          created = meta.created,",
+				"          revision = meta.revision,",
+				"          info = info.event.name,",
+				"          innings = info.event.match_number,",
+				"          match_number = info.match_type,",
+				"          match_type_number = info.match_type_number,",
+				"          {South Africa} = info.players.{South Africa}",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
 			]
 		}
 	}
