@@ -61,7 +61,7 @@
 				"          teams2 = teams[2],",
 				"          player_of_match1 = player_of_match[1],",
 				"          player_of_match2 = player_of_match[2],",
-				"          by_wickets = toSting(['wickets']),",
+				"          by_wickets = toString(['wickets']),",
 				"          by_runs = ['runs']) ~> DelistArrayColumns"
 			]
 		}
