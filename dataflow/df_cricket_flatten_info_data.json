@@ -21,7 +21,7 @@
 					"name": "derivedColumn1"
 				},
 				{
-					"name": "parse1"
+					"name": "flatten2"
 				}
 			],
 			"scriptLines": [
@@ -60,10 +60,34 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(column2 = ERROR_FUNCTION('')) ~> derivedColumn1",
-				"derivedColumn1 parse(outcome = ERROR_FUNCTION(''),",
-				"     format: 'json',",
-				"     documentForm: 'documentPerLine') ~> parse1"
+				"flatten2 derive(by = toString(by),",
+				"          column1 = ERROR_FUNCTION('')) ~> derivedColumn1",
+				"flatten1 foldDown(unrollMultiple(teams,player_of_match),",
+				"     mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          balls_per_over,",
+				"          city,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          gender,",
+				"          match_type,",
+				"          match_type_number,",
+				"          outcome,",
+				"          by,",
+				"          overs,",
+				"          season,",
+				"          team_type,",
+				"          toss,",
+				"          decision,",
+				"          venue,",
+				"          teams,",
+				"          player_of_match",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2"
 			]
 		}
 	}
