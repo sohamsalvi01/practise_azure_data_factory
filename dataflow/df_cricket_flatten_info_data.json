@@ -41,7 +41,8 @@
 				"          match_type = info.match_type,",
 				"          match_type_number = info.match_type_number,",
 				"          winner = info.outcome.winner,",
-				"          runs = info.outcome.by.runs",
+				"          runs = info.outcome.by.runs,",
+				"          player_of_match = info.player_of_match",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1"
