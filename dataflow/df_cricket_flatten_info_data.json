@@ -15,9 +15,6 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "select1"
-				},
-				{
 					"name": "flatten1"
 				}
 			],
@@ -31,24 +28,6 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"flatten1 select(mapColumn(",
-				"          data_version = meta.data_version,",
-				"          created = meta.created,",
-				"          info = meta.revision,",
-				"          balls_per_over = info.balls_per_over,",
-				"          city = info.city,",
-				"          dates = info.dates,",
-				"          name = info.event.name,",
-				"          match_number = info.event.match_number,",
-				"          gender = info.gender,",
-				"          match_type = info.match_type,",
-				"          match_type_number = info.match_type_number,",
-				"          winner = info.outcome.winner,",
-				"          runs = info.outcome.by.runs,",
-				"          player_of_match = info.player_of_match",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
 				"StageFileData foldDown(unroll(info.dates),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
