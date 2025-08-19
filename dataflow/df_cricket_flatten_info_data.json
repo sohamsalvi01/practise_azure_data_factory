@@ -60,7 +60,8 @@
 				"FlattenInfo derive(teams1 = teams[1],",
 				"          teams2 = teams[2],",
 				"          player_of_match1 = player_of_match[1],",
-				"          player_of_match2 = player_of_match[2]) ~> DelistArrayColumns"
+				"          player_of_match2 = player_of_match[2],",
+				"          by = toString(by)) ~> DelistArrayColumns"
 			]
 		}
 	}
