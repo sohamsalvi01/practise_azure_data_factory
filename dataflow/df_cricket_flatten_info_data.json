@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "select1"
+				},
+				{
+					"name": "flatten1"
 				}
 			],
 			"scriptLines": [
@@ -28,7 +31,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData select(mapColumn(",
+				"flatten1 select(mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
 				"          info = meta.revision,",
@@ -45,7 +48,32 @@
 				"          player_of_match = info.player_of_match",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"StageFileData foldDown(unroll(info.dates),",
+				"     mapColumn(",
+				"          data_version = meta.data_version,",
+				"          created = meta.created,",
+				"          revision = meta.revision,",
+				"          balls_per_over = info.balls_per_over,",
+				"          city = info.city,",
+				"          dates = info.dates,",
+				"          event = info.event.name,",
+				"          match_number = info.event.match_number,",
+				"          gender = info.gender,",
+				"          match_type = info.match_type,",
+				"          match_type_number = info.match_type_number,",
+				"          outcome = info.outcome,",
+				"          runs = info.outcome.by.runs,",
+				"          overs = info.overs,",
+				"          player_of_match = info.player_of_match,",
+				"          season = info.season,",
+				"          team_type = info.team_type,",
+				"          teams = info.teams,",
+				"          toss = info.toss,",
+				"          venue = info.venue",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
 			]
 		}
 	}
