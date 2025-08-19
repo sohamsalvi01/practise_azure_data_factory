@@ -19,9 +19,6 @@
 				},
 				{
 					"name": "DelistArrayColumns"
-				},
-				{
-					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -64,8 +61,7 @@
 				"          teams2 = teams[2],",
 				"          player_of_match1 = player_of_match[1],",
 				"          player_of_match2 = player_of_match[2],",
-				"          by_derived = at(array(by),1)) ~> DelistArrayColumns",
-				"DelistArrayColumns derive(by_1 = flatten(array(by))) ~> derivedColumn1"
+				"          outcome_by = split(toString(by),':')[1]) ~> DelistArrayColumns"
 			]
 		}
 	}
