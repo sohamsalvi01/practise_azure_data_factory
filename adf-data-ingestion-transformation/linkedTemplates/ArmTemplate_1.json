@@ -354,6 +354,419 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_source_json_files_cricket_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/source_cricket_json_files",
+						"fileSystem": "hello-world-pipelines"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"meta": {
+							"type": "object",
+							"properties": {
+								"data_version": {
+									"type": "string"
+								},
+								"created": {
+									"type": "string"
+								},
+								"revision": {
+									"type": "integer"
+								}
+							}
+						},
+						"info": {
+							"type": "object",
+							"properties": {
+								"balls_per_over": {
+									"type": "integer"
+								},
+								"city": {
+									"type": "string"
+								},
+								"dates": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"event": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"match_number": {
+											"type": "integer"
+										}
+									}
+								},
+								"gender": {
+									"type": "string"
+								},
+								"match_type": {
+									"type": "string"
+								},
+								"match_type_number": {
+									"type": "integer"
+								},
+								"officials": {
+									"type": "object",
+									"properties": {
+										"match_referees": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"reserve_umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"tv_umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"outcome": {
+									"type": "object",
+									"properties": {
+										"winner": {
+											"type": "string"
+										},
+										"by": {
+											"type": "object",
+											"properties": {
+												"runs": {
+													"type": "integer"
+												}
+											}
+										}
+									}
+								},
+								"overs": {
+									"type": "integer"
+								},
+								"player_of_match": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"players": {
+									"type": "object",
+									"properties": {
+										"South Africa": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"Australia": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"registry": {
+									"type": "object",
+									"properties": {
+										"people": {
+											"type": "object",
+											"properties": {
+												"A Zampa": {
+													"type": "string"
+												},
+												"AK Markram": {
+													"type": "string"
+												},
+												"CM Brown": {
+													"type": "string"
+												},
+												"DA Miller": {
+													"type": "string"
+												},
+												"DA Warner": {
+													"type": "string"
+												},
+												"GJ Maxwell": {
+													"type": "string"
+												},
+												"H Klaasen": {
+													"type": "string"
+												},
+												"HE van der Dussen": {
+													"type": "string"
+												},
+												"J Srinath": {
+													"type": "string"
+												},
+												"JP Inglis": {
+													"type": "string"
+												},
+												"JR Hazlewood": {
+													"type": "string"
+												},
+												"JS Wilson": {
+													"type": "string"
+												},
+												"K Rabada": {
+													"type": "string"
+												},
+												"KA Maharaj": {
+													"type": "string"
+												},
+												"L Ngidi": {
+													"type": "string"
+												},
+												"M Jansen": {
+													"type": "string"
+												},
+												"M Labuschagne": {
+													"type": "string"
+												},
+												"MA Starc": {
+													"type": "string"
+												},
+												"MP Stoinis": {
+													"type": "string"
+												},
+												"MR Marsh": {
+													"type": "string"
+												},
+												"PJ Cummins": {
+													"type": "string"
+												},
+												"Q de Kock": {
+													"type": "string"
+												},
+												"RA Kettleborough": {
+													"type": "string"
+												},
+												"RK Illingworth": {
+													"type": "string"
+												},
+												"SA Abbott": {
+													"type": "string"
+												},
+												"SPD Smith": {
+													"type": "string"
+												},
+												"T Bavuma": {
+													"type": "string"
+												},
+												"T Shamsi": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								},
+								"season": {
+									"type": "string"
+								},
+								"team_type": {
+									"type": "string"
+								},
+								"teams": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"toss": {
+									"type": "object",
+									"properties": {
+										"decision": {
+											"type": "string"
+										},
+										"winner": {
+											"type": "string"
+										}
+									}
+								},
+								"venue": {
+									"type": "string"
+								}
+							}
+						},
+						"innings": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"team": {
+										"type": "string"
+									},
+									"overs": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"over": {
+													"type": "integer"
+												},
+												"deliveries": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"batter": {
+																"type": "string"
+															},
+															"bowler": {
+																"type": "string"
+															},
+															"non_striker": {
+																"type": "string"
+															},
+															"runs": {
+																"type": "object",
+																"properties": {
+																	"batter": {
+																		"type": "integer"
+																	},
+																	"extras": {
+																		"type": "integer"
+																	},
+																	"total": {
+																		"type": "integer"
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									"powerplays": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"from": {
+													"type": "number"
+												},
+												"to": {
+													"type": "number"
+												},
+												"type": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_cricket_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p9_source_json_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "file_100kb.json",
+						"folderPath": "p9/source_souce_sample_files",
+						"fileSystem": "hello-world-pipelines"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p9_target_flatten_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p9/target_flatten_elements_csv",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/p2')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
