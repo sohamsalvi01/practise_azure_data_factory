@@ -68,7 +68,7 @@
 				"          player_of_match1 = player_of_match[1],",
 				"          player_of_match2 = player_of_match[2],",
 				"          by_wickets = at(array(by),1),",
-				"          by_run = at(array(by),2)) ~> DelistArrayColumns",
+				"          by_run = array(by)[1]) ~> DelistArrayColumns",
 				"parse1 foldDown(unroll(),",
 				"     mapColumn(",
 				"          data_version,",
