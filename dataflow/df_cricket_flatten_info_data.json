@@ -15,10 +15,10 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "flatten1"
+					"name": "FlattenInfo"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "DelistArrayColumns"
 				}
 			],
 			"scriptLines": [
@@ -56,11 +56,11 @@
 				"          player_of_match = info.player_of_match",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(teams1 = teams[1],",
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
+				"FlattenInfo derive(teams1 = teams[1],",
 				"          teams2 = teams[2],",
 				"          player_of_match1 = player_of_match[1],",
-				"          player_of_match2 = player_of_match[2]) ~> derivedColumn1"
+				"          player_of_match2 = player_of_match[2]) ~> DelistArrayColumns"
 			]
 		}
 	}
