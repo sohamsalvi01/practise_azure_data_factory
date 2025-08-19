@@ -57,7 +57,9 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(teams = teams[1]) ~> derivedColumn1"
+				"flatten1 derive(teams = teams[1],",
+				"          teams2 = teams[2],",
+				"          teams3 = teams[3]) ~> derivedColumn1"
 			]
 		}
 	}
