@@ -21,7 +21,7 @@
 					"name": "DelistArrayColumns"
 				},
 				{
-					"name": "flatten1"
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -65,39 +65,7 @@
 				"          player_of_match1 = player_of_match[1],",
 				"          player_of_match2 = player_of_match[2],",
 				"          by_derived = at(array(by),1)) ~> DelistArrayColumns",
-				"DelistArrayColumns foldDown(unroll(by_run),",
-				"     mapColumn(",
-				"          data_version,",
-				"          created,",
-				"          revision,",
-				"          balls_per_over,",
-				"          city,",
-				"          dates,",
-				"          event,",
-				"          match_number,",
-				"          gender,",
-				"          match_type,",
-				"          match_type_number,",
-				"          outcome,",
-				"          by,",
-				"          overs,",
-				"          season,",
-				"          team_type,",
-				"          toss,",
-				"          decision,",
-				"          venue,",
-				"          teams,",
-				"          player_of_match,",
-				"          teams1,",
-				"          teams2,",
-				"          player_of_match1,",
-				"          player_of_match2,",
-				"          by_wickets = by_derived,",
-				"          by_run = by_wickets,",
-				"          by_run2",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1"
+				"DelistArrayColumns derive(by_1 = flatten(array(by))) ~> derivedColumn1"
 			]
 		}
 	}
