@@ -16,9 +16,6 @@
 			"transformations": [
 				{
 					"name": "flatten1"
-				},
-				{
-					"name": "flatten2"
 				}
 			],
 			"scriptLines": [
@@ -29,25 +26,15 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unrollMultiple(info.teams,(info.players.{teams}\r",
-				")),",
+				"StageFileData foldDown(unrollMultiple(info.players.{South Africa},info.players.Australia),",
 				"     mapColumn(",
-				"          teams = info.teams,",
-				"          players = info.players,",
-				"          each(match(info.players.{teams}),",
-				"               teams = $$)",
+				"          teams = info.teams",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 foldDown(unroll(),",
-				"     mapColumn(",
-				"          teams,",
-				"          players",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten2"
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
 			]
 		}
 	}
