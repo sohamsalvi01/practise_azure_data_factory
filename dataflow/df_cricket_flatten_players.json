@@ -28,9 +28,10 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unroll(info.dates),",
+				"StageFileData foldDown(unroll(info.teams),",
 				"     mapColumn(",
-				"          innings = info.players",
+				"          teams = info.teams,",
+				"          players = info.players",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1"
