@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "FlattenInfo"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -28,7 +31,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unroll(),",
+				"derivedColumn1 foldDown(unroll(),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
@@ -44,7 +47,8 @@
 				"          {South Africa} = info.players.{South Africa}",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
+				"StageFileData derive(info2 = info.players) ~> derivedColumn1"
 			]
 		}
 	}
