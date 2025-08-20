@@ -66,7 +66,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(players3 = split(toString(players2),':')) ~> derivedColumn1"
+				"flatten1 derive(players_team_name = split(toString(players2),':')[1],",
+				"          players = split(toString(players2),':')[2]) ~> derivedColumn1"
 			]
 		}
 	}
