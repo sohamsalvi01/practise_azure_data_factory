@@ -28,6 +28,12 @@
 				},
 				{
 					"name": "FlattenPlayerNames"
+				},
+				{
+					"name": "PlayerPK"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -85,7 +91,25 @@
 				"          players3",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenPlayerNames"
+				"     skipDuplicateMapOutputs: false) ~> FlattenPlayerNames",
+				"FlattenPlayerNames keyGenerate(output(PlayerPK as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> PlayerPK",
+				"PlayerPK select(mapColumn(",
+				"          PlayerPK,",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          match_type,",
+				"          match_type_number,",
+				"          players_team_name,",
+				"          players3",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
