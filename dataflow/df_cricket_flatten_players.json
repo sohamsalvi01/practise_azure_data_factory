@@ -40,7 +40,7 @@
 				"          gender = info.gender,",
 				"          match_type = info.match_type,",
 				"          match_type_number = info.match_type_number,",
-				"          players = info.players",
+				"          players = info.players.{South Africa}",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
