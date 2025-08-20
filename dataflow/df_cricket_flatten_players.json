@@ -28,7 +28,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unroll(info.dates),",
+				"StageFileData foldDown(unrollMultiple(info.players.{South Africa},info.players.Australia),",
 				"     mapColumn(",
 				"          meta = info.players",
 				"     ),",
