@@ -28,7 +28,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unrollMultiple(each(info.players, match())),",
+				"StageFileData foldDown(unrollMultiple(every(info.players, match())),",
 				"     mapColumn(",
 				"          players = info.players",
 				"     ),",
