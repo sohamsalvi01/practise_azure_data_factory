@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "p8/target_raw_flatten_files/info",
+				"folderPath": "p8/target_raw_flatten_files/players",
 				"fileSystem": "hello-world-pipelines"
 			},
 			"columnDelimiter": ",",
