@@ -28,10 +28,9 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unrollMultiple(each(match(info.players.{teams[1]}))),",
+				"StageFileData foldDown(unrollMultiple(each(info.players, match())),",
 				"     mapColumn(",
-				"          meta = info.players.{South Africa},",
-				"          Australia = info.players.Australia",
+				"          players = info.players",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1"
