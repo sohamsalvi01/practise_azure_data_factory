@@ -30,7 +30,8 @@
 				"     documentForm: 'singleDocument') ~> StageFileData",
 				"StageFileData foldDown(unrollMultiple(info.players.{South Africa},info.players.Australia),",
 				"     mapColumn(",
-				"          meta = info.players",
+				"          meta = info.players.{South Africa},",
+				"          Australia = info.players.Australia",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1"
