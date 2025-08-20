@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "FlattenInfo"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -28,7 +31,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unroll(info.dates),",
+				"select1 foldDown(unroll(info.dates),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
@@ -43,7 +46,12 @@
 				"          players = info.players",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
+				"StageFileData select(mapColumn(",
+				"          meta = info.players",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
