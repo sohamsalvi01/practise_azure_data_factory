@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "flatten1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          meta as (data_version as string, created as string, revision as integer),",
@@ -23,7 +27,13 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'singleDocument') ~> StageFileData"
+				"     documentForm: 'singleDocument') ~> StageFileData",
+				"StageFileData foldDown(unroll(),",
+				"     mapColumn(",
+				"          meta = info.players",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1"
 			]
 		}
 	}
