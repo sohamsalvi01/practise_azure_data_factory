@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_p8_target_flatten_cricket_files",
+						"referenceName": "ds_p8_target_flatten_info",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
