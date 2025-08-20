@@ -12,27 +12,10 @@
 					"name": "StageFileData"
 				}
 			],
-			"sinks": [
-				{
-					"dataset": {
-						"referenceName": "ds_p8_target_flatten_cricket_files",
-						"type": "DatasetReference"
-					},
-					"name": "sink1"
-				}
-			],
+			"sinks": [],
 			"transformations": [
 				{
 					"name": "FlattenInfo"
-				},
-				{
-					"name": "DelistArrayColumns"
-				},
-				{
-					"name": "SelectAndRenameColumns"
-				},
-				{
-					"name": "InfoSummaryPK"
 				}
 			],
 			"scriptLines": [
@@ -45,7 +28,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unrollMultiple(info.players.{South Africa},),",
+				"StageFileData foldDown(unroll(info.dates),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
@@ -60,56 +43,7 @@
 				"          players = info.players",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
-				"FlattenInfo derive(teams1 = teams[1],",
-				"          teams2 = teams[2],",
-				"          player_of_match1 = player_of_match[1],",
-				"          player_of_match2 = player_of_match[2],",
-				"          win_by = replace(replace(split(toString(by),':')[1],'\"',''),'{',''),",
-				"          win_by_wickets_or_runs = replace(replace(split(toString(by),':')[2],'\"',''),'}','')) ~> DelistArrayColumns",
-				"InfoSummaryPK select(mapColumn(",
-				"          info_summary_pk,",
-				"          data_version,",
-				"          created,",
-				"          revision,",
-				"          balls_per_over,",
-				"          city,",
-				"          dates,",
-				"          event,",
-				"          match_number,",
-				"          gender,",
-				"          match_type,",
-				"          match_type_number,",
-				"          outcome,",
-				"          overs,",
-				"          season,",
-				"          team_type,",
-				"          toss,",
-				"          decision,",
-				"          venue,",
-				"          teams,",
-				"          player_of_match,",
-				"          teams1,",
-				"          teams2,",
-				"          player_of_match1,",
-				"          player_of_match2,",
-				"          win_by,",
-				"          win_by_wickets_or_runs",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectAndRenameColumns",
-				"DelistArrayColumns keyGenerate(output(info_summary_pk as long),",
-				"     startAt: 1L,",
-				"     stepValue: 1L) ~> InfoSummaryPK",
-				"SelectAndRenameColumns sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     partitionFileNames:['info.csv'],",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
 			]
 		}
 	}
