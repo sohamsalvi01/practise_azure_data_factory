@@ -13,11 +13,7 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [
-				{
-					"name": "FlattenInfo"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          meta as (data_version as string, created as string, revision as integer),",
@@ -27,22 +23,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
-				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unroll(info.dates),",
-				"     mapColumn(",
-				"          data_version = meta.data_version,",
-				"          created = meta.created,",
-				"          revision = meta.revision,",
-				"          balls_per_over = info.balls_per_over,",
-				"          dates = info.dates,",
-				"          event = info.event.name,",
-				"          match_number = info.event.match_number,",
-				"          gender = info.gender,",
-				"          match_type = info.match_type,",
-				"          match_type_number = info.match_type_number",
-				"     ),",
-				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
+				"     documentForm: 'singleDocument') ~> StageFileData"
 			]
 		}
 	}
