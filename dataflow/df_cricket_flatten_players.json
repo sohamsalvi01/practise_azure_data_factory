@@ -15,19 +15,19 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "FlattenInfo"
+					"name": "KeysAndPlayerObject"
 				},
 				{
-					"name": "DelistArrayColumns"
+					"name": "Team1AndTeam2Array"
 				},
 				{
-					"name": "flatten1"
+					"name": "FlattenTeamObject"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "SplitTeamAndPlayerNames"
 				},
 				{
-					"name": "flatten2"
+					"name": "FlattenPlayerNames"
 				}
 			],
 			"scriptLines": [
@@ -53,9 +53,9 @@
 				"          players = info.players",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
-				"FlattenInfo derive(players2 = split(replace(replace(replace(toString(players),'{',''),'}',''),'],\"',']|\"'),'|')) ~> DelistArrayColumns",
-				"DelistArrayColumns foldDown(unroll(players2),",
+				"     skipDuplicateMapOutputs: false) ~> KeysAndPlayerObject",
+				"KeysAndPlayerObject derive(players2 = split(replace(replace(replace(toString(players),'{',''),'}',''),'],\"',']|\"'),'|')) ~> Team1AndTeam2Array",
+				"Team1AndTeam2Array foldDown(unroll(players2),",
 				"     mapColumn(",
 				"          data_version,",
 				"          created,",
@@ -68,10 +68,10 @@
 				"          players2",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 derive(players_team_name = split(toString(players2),':')[1],",
-				"          players3 = split(split(toString(players2),':')[2],',')) ~> derivedColumn1",
-				"derivedColumn1 foldDown(unroll(players3),",
+				"     skipDuplicateMapOutputs: false) ~> FlattenTeamObject",
+				"FlattenTeamObject derive(players_team_name = split(toString(players2),':')[1],",
+				"          players3 = split(split(toString(players2),':')[2],',')) ~> SplitTeamAndPlayerNames",
+				"SplitTeamAndPlayerNames foldDown(unroll(players3),",
 				"     mapColumn(",
 				"          data_version,",
 				"          created,",
@@ -85,7 +85,7 @@
 				"          players3",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten2"
+				"     skipDuplicateMapOutputs: false) ~> FlattenPlayerNames"
 			]
 		}
 	}
