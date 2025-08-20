@@ -33,7 +33,6 @@
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
 				"          revision = meta.revision,",
-				"          city = info.city,",
 				"          dates = info.dates,",
 				"          event = info.event.name,",
 				"          match_number = info.event.match_number,",
