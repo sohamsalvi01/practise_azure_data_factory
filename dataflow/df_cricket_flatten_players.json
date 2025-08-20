@@ -16,9 +16,6 @@
 			"transformations": [
 				{
 					"name": "FlattenInfo"
-				},
-				{
-					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -31,7 +28,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"derivedColumn1 foldDown(unroll(),",
+				"StageFileData foldDown(unroll(info.dates),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
@@ -42,12 +39,10 @@
 				"          match_number = info.event.match_number,",
 				"          gender = info.gender,",
 				"          match_type = info.match_type,",
-				"          match_type_number = info.match_type_number,",
-				"          players = info2",
+				"          match_type_number = info.match_type_number",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
-				"StageFileData derive(info2 = info.players) ~> derivedColumn1"
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
 			]
 		}
 	}
