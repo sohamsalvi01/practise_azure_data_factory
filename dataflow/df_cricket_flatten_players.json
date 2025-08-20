@@ -19,6 +19,9 @@
 				},
 				{
 					"name": "DelistArrayColumns"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -45,8 +48,22 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
-				"FlattenInfo derive(players1 = array(players)[1],",
-				"          players2 = array(players)[2]) ~> DelistArrayColumns"
+				"FlattenInfo derive(players1 = toString(array(players)[1]),",
+				"          players2 = split(replace(replace(replace(toString(players),'{',''),'}',''),'],\"',']|\"'),'|')) ~> DelistArrayColumns",
+				"DelistArrayColumns select(mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          match_type,",
+				"          match_type_number,",
+				"          players1,",
+				"          players2",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
