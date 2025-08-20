@@ -39,7 +39,8 @@
 				"          match_number = info.event.match_number,",
 				"          gender = info.gender,",
 				"          match_type = info.match_type,",
-				"          match_type_number = info.match_type_number",
+				"          match_type_number = info.match_type_number,",
+				"          players = info.players",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
