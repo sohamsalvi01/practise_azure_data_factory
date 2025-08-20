@@ -25,6 +25,9 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "flatten2"
 				}
 			],
 			"scriptLines": [
@@ -67,7 +70,22 @@
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
 				"flatten1 derive(players_team_name = split(toString(players2),':')[1],",
-				"          players = split(toString(players2),':')[2]) ~> derivedColumn1"
+				"          players = array(split(toString(players2),':')[2])) ~> derivedColumn1",
+				"derivedColumn1 foldDown(unroll(players),",
+				"     mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          match_type,",
+				"          match_type_number,",
+				"          players_team_name,",
+				"          players",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2"
 			]
 		}
 	}
