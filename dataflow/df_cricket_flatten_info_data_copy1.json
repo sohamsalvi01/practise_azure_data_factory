@@ -1,5 +1,5 @@
 {
-	"name": "df_cricket_flatten_players",
+	"name": "df_cricket_flatten_info_data_copy1",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -15,10 +15,10 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "flatten1"
+					"name": "FlattenInfo"
 				},
 				{
-					"name": "cast1"
+					"name": "DelistArrayColumns"
 				}
 			],
 			"scriptLines": [
@@ -31,16 +31,16 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unroll(info.teams),",
+				"StageFileData foldDown(unroll(info.dates),",
 				"     mapColumn(",
+				"          teams = info.teams,",
 				"          players = info.players",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flatten1 cast(output(",
-				"          players as ({South Africa} as string[], Australia as string[])",
-				"     ),",
-				"     errors: true) ~> cast1"
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
+				"FlattenInfo derive(teams1 = teams[1],",
+				"          teams2 = teams[2],",
+				"          each(match(), ERROR_FUNCTION('') = ERROR_FUNCTION(''))) ~> DelistArrayColumns"
 			]
 		}
 	}
