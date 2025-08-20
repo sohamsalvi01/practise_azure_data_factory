@@ -1,5 +1,5 @@
 {
-	"name": "df_cricket_flatten_info_data_copy1",
+	"name": "df_cricket_flatten_players",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
