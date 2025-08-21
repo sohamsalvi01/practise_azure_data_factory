@@ -62,7 +62,9 @@
 				"          deliveries_wickets1 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[1],",
 				"          deliveries_wickets2 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[2],",
 				"          deliveries_wickets3 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[3]) ~> derivedColumn1",
-				"derivedColumn1 derive(wickets3 = ERROR_FUNCTION('')) ~> derivedColumn2"
+				"derivedColumn1 derive(wickets_kind = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"kind\"'),",
+				"          player_out = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"player_out\"'),",
+				"          fielders_name = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"name\"')) ~> derivedColumn2"
 			]
 		}
 	}
