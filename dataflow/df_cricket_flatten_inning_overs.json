@@ -28,7 +28,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false,",
 				"     documentForm: 'singleDocument') ~> StageFileData",
-				"StageFileData foldDown(unrollMultiple(info.dates,innings,innings.overs),",
+				"StageFileData foldDown(unrollMultiple(info.dates,innings,innings.overs,innings.overs.deliveries),",
 				"     mapColumn(",
 				"          data_version = meta.data_version,",
 				"          created = meta.created,",
