@@ -22,6 +22,9 @@
 				},
 				{
 					"name": "derivedColumn2"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -64,7 +67,32 @@
 				"          deliveries_wickets3 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[3]) ~> derivedColumn1",
 				"derivedColumn1 derive(wickets_kind = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"kind\"'),",
 				"          player_out = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"player_out\"'),",
-				"          fielders_name = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"name\"')) ~> derivedColumn2"
+				"          fielders_name = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"name\"')) ~> derivedColumn2",
+				"derivedColumn2 select(mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          match_type,",
+				"          match_type_number,",
+				"          innings,",
+				"          team,",
+				"          over,",
+				"          batter,",
+				"          bowler,",
+				"          non_striker,",
+				"          runs,",
+				"          batter_run_per_ball,",
+				"          extra_run_per_ball,",
+				"          total_run_per_ball,",
+				"          wickets_kind,",
+				"          player_out,",
+				"          fielders_name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
 			]
 		}
 	}
