@@ -37,7 +37,9 @@
 				"          event = info.event.name,",
 				"          match_number = info.event.match_number,",
 				"          match_type = info.match_type,",
-				"          match_type_number = info.match_type_number",
+				"          match_type_number = info.match_type_number,",
+				"          innings = innings,",
+				"          team = innings.team",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
