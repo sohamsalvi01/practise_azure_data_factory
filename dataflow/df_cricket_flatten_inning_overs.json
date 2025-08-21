@@ -44,7 +44,6 @@
 				"          innings = innings.overs.over,",
 				"          team = innings.team,",
 				"          over = innings.overs.over,",
-				"          deliveries = innings.overs.deliveries,",
 				"          batter = innings.overs.deliveries.batter,",
 				"          bowler = innings.overs.deliveries.bowler,",
 				"          non_striker = innings.overs.deliveries.non_striker,",
@@ -52,9 +51,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
-				"FlattenInfo derive(batter = array(runs)[1],",
-				"          extras = array(runs)[1],",
-				"          total = array(runs)[1]) ~> derivedColumn1"
+				"FlattenInfo derive(runs = split(toString(runs),','),",
+				"          batter = split(toString(runs),',')[1]) ~> derivedColumn1"
 			]
 		}
 	}
