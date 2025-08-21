@@ -19,6 +19,9 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
 				}
 			],
 			"scriptLines": [
@@ -56,7 +59,10 @@
 				"          batter_run_per_ball = split(split(toString(runs),',')[1],':')[2],",
 				"          extra_run_per_ball = split(split(toString(runs),',')[2],':')[2],",
 				"          total_run_per_ball = split(split(toString(runs),',')[3],':')[2],",
-				"          wickets2 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',') ) ~> derivedColumn1"
+				"          deliveries_wickets1 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[1],",
+				"          deliveries_wickets2 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[2],",
+				"          deliveries_wickets3 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[3]) ~> derivedColumn1",
+				"derivedColumn1 derive(wickets3 = ERROR_FUNCTION('')) ~> derivedColumn2"
 			]
 		}
 	}
