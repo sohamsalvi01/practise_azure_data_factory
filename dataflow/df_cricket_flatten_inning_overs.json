@@ -57,9 +57,8 @@
 				"          extra_run_per_ball = split(split(toString(runs),',')[2],':')[2],",
 				"          total_run_per_ball = split(split(toString(runs),',')[3],':')[2],",
 				"          wickets = split(split(toString(wickets),'},\"')[2],','),",
-				"          player_out = find(split(split(toString(wickets),'},\"')[2],','),'player_out'),",
 				"          fielders_name = split(split(toString(wickets),'},\"')[2],',')[2],",
-				"          wickets_kind = split(split(toString(wickets),'},\"')[2],',')[3]) ~> derivedColumn1"
+				"          column1 = slice(array(wickets),1,1)) ~> derivedColumn1"
 			]
 		}
 	}
