@@ -52,7 +52,9 @@
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
 				"FlattenInfo derive(runs = split(toString(runs),','),",
-				"          batter = split(toString(runs),',')[1]) ~> derivedColumn1"
+				"          batter_run_per_ball = split(toString(runs),',')[1],",
+				"          extra_run_per_ball = split(toString(runs),',')[2],",
+				"          total_run_per_ball = split(toString(runs),',')[3]) ~> derivedColumn1"
 			]
 		}
 	}
