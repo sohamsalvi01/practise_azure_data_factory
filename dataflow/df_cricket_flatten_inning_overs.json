@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "FlattenInfo"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -48,7 +51,10 @@
 				"          runs = innings.overs.deliveries.runs",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo"
+				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
+				"FlattenInfo derive(batter = array(runs)[1],",
+				"          extras = array(runs)[1],",
+				"          total = array(runs)[1]) ~> derivedColumn1"
 			]
 		}
 	}
