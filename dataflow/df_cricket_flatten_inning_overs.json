@@ -47,14 +47,16 @@
 				"          batter = innings.overs.deliveries.batter,",
 				"          bowler = innings.overs.deliveries.bowler,",
 				"          non_striker = innings.overs.deliveries.non_striker,",
-				"          runs = innings.overs.deliveries.runs",
+				"          runs = innings.overs.deliveries.runs,",
+				"          wickets = innings.overs.deliveries",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
 				"FlattenInfo derive(runs = split(toString(runs),','),",
 				"          batter_run_per_ball = split(split(toString(runs),',')[1],':')[2],",
 				"          extra_run_per_ball = split(split(toString(runs),',')[2],':')[2],",
-				"          total_run_per_ball = split(split(toString(runs),',')[3],':')[2]) ~> derivedColumn1"
+				"          total_run_per_ball = split(split(toString(runs),',')[3],':')[2],",
+				"          wickets = array(wickets)) ~> derivedColumn1"
 			]
 		}
 	}
