@@ -1,5 +1,5 @@
 {
-	"name": "df_cricket_flatten_info_data_copy1",
+	"name": "df_cricket_flatten_inning_overs",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -38,7 +38,7 @@
 				"          match_number = info.event.match_number,",
 				"          match_type = info.match_type,",
 				"          match_type_number = info.match_type_number,",
-				"          innings = innings,",
+				"          innings,",
 				"          team = innings.team",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
