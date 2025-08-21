@@ -13,6 +13,163 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/p6')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "abc_active_flag",
+										"value": {
+											"value": "@string('true')",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_load_timestamp",
+										"value": {
+											"value": "@string(utcNow())",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_adf_name",
+										"value": {
+											"value": "@pipeline().DataFactory",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_pipeline_name",
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_run_id",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_trigger_name",
+										"value": {
+											"value": "@pipeline().TriggerName",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_trigger_time",
+										"value": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										}
+									}
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": {
+										"value": "@concat(pipeline().parameters.param_p_file_path,'/*')",
+										"type": "Expression"
+									},
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ""
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p1_odc_source",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_ds_filename": {
+										"value": "@pipeline().parameters.param_p_filename",
+										"type": "Expression"
+									},
+									"param_ds_filepath": {
+										"value": "@pipeline().parameters.param_p_file_path",
+										"type": "Expression"
+									},
+									"param_ds_container": {
+										"value": "@pipeline().parameters.param_p_container_name",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p1_raw_layer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_p_filename": {
+						"type": "string"
+					},
+					"param_p_container_name": {
+						"type": "string",
+						"defaultValue": "hello-world-pipelines"
+					},
+					"param_p_file_path": {
+						"type": "string",
+						"defaultValue": "p2/source_odc_data"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/p7')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -428,7 +585,7 @@
 						}
 					},
 					{
-						"name": "Log Failure_copy1",
+						"name": "Log Success",
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [
 							{
@@ -745,6 +902,125 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/df_cricket_flatten_inning_overs')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_source_json_files_cricket_data",
+								"type": "DatasetReference"
+							},
+							"name": "StageFileData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_target_flatten_innings",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FlattenInfo"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          meta as (data_version as string, created as string, revision as integer),",
+						"          info as (balls_per_over as integer, city as string, dates as string[], event as (name as string, match_number as integer), gender as string, match_type as string, match_type_number as integer, officials as (match_referees as string[], reserve_umpires as string[], tv_umpires as string[], umpires as string[]), outcome as (winner as string, by as (runs as integer)), overs as integer, player_of_match as string[], players as ({South Africa} as string[], Australia as string[]), registry as (people as ({A Zampa} as string, {AK Markram} as string, {CM Brown} as string, {DA Miller} as string, {DA Warner} as string, {GJ Maxwell} as string, {H Klaasen} as string, {HE van der Dussen} as string, {J Srinath} as string, {JP Inglis} as string, {JR Hazlewood} as string, {JS Wilson} as string, {K Rabada} as string, {KA Maharaj} as string, {L Ngidi} as string, {M Jansen} as string, {M Labuschagne} as string, {MA Starc} as string, {MP Stoinis} as string, {MR Marsh} as string, {PJ Cummins} as string, {Q de Kock} as string, {RA Kettleborough} as string, {RK Illingworth} as string, {SA Abbott} as string, {SPD Smith} as string, {T Bavuma} as string, {T Shamsi} as string)), season as string, team_type as string, teams as string[], toss as (decision as string, winner as string), venue as string),",
+						"          innings as (team as string, overs as (over as integer, deliveries as (batter as string, bowler as string, non_striker as string, runs as (batter as integer, extras as integer, total as integer))[])[], powerplays as (from as double, to as double, type as string)[])[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> StageFileData",
+						"StageFileData foldDown(unrollMultiple(info.dates,innings,innings.overs,innings.overs.deliveries),",
+						"     mapColumn(",
+						"          data_version = meta.data_version,",
+						"          created = meta.created,",
+						"          revision = meta.revision,",
+						"          dates = info.dates,",
+						"          event = info.event.name,",
+						"          match_number = info.event.match_number,",
+						"          match_type = info.match_type,",
+						"          match_type_number = info.match_type_number,",
+						"          innings = innings.overs.over,",
+						"          team = innings.team,",
+						"          over = innings.overs.over,",
+						"          batter = innings.overs.deliveries.batter,",
+						"          bowler = innings.overs.deliveries.bowler,",
+						"          non_striker = innings.overs.deliveries.non_striker,",
+						"          runs = innings.overs.deliveries.runs,",
+						"          wickets = innings.overs.deliveries",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
+						"FlattenInfo derive(runs = split(toString(runs),','),",
+						"          batter_run_per_ball = split(split(toString(runs),',')[1],':')[2],",
+						"          extra_run_per_ball = split(split(toString(runs),',')[2],':')[2],",
+						"          total_run_per_ball = split(split(toString(runs),',')[3],':')[2],",
+						"          deliveries_wickets1 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[1],",
+						"          deliveries_wickets2 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[2],",
+						"          deliveries_wickets3 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[3]) ~> derivedColumn1",
+						"derivedColumn1 derive(wickets_kind = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"kind\"'),",
+						"          player_out = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"player_out\"'),",
+						"          fielders_name = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"name\"')) ~> derivedColumn2",
+						"derivedColumn2 select(mapColumn(",
+						"          data_version,",
+						"          created,",
+						"          revision,",
+						"          dates,",
+						"          event,",
+						"          match_number,",
+						"          match_type,",
+						"          match_type_number,",
+						"          innings,",
+						"          team,",
+						"          over,",
+						"          batter,",
+						"          bowler,",
+						"          non_striker,",
+						"          runs,",
+						"          batter_run_per_ball,",
+						"          extra_run_per_ball,",
+						"          total_run_per_ball,",
+						"          wickets_kind,",
+						"          player_out,",
+						"          fielders_name",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['innings.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/df_cricket_flatten_players')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -881,7 +1157,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/p8')]",
+			"name": "[concat(parameters('factoryName'), '/p8_info_summary')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -924,6 +1200,52 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/df_cricket_flatten_info_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p8_players')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "transform_data",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_cricket_flatten_players",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"StageFileData": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 16,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_cricket_flatten_players')]"
 			]
 		}
 	]

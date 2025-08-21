@@ -718,6 +718,32 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_innings')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files/innings",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_players')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1163,163 +1189,6 @@
 				"[concat(variables('factoryId'), '/datasets/ds_p5_target_temp_location')]",
 				"[concat(variables('factoryId'), '/datasets/ds_p5_target_archive_lication_binary_file')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/p6')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy data1",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"additionalColumns": [
-									{
-										"name": "abc_active_flag",
-										"value": {
-											"value": "@string('true')",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "abc_load_timestamp",
-										"value": {
-											"value": "@string(utcNow())",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "abc_adf_name",
-										"value": {
-											"value": "@pipeline().DataFactory",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "abc_pipeline_name",
-										"value": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "abc_run_id",
-										"value": {
-											"value": "@pipeline().RunId",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "abc_trigger_name",
-										"value": {
-											"value": "@pipeline().TriggerName",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "abc_trigger_time",
-										"value": {
-											"value": "@pipeline().TriggerTime",
-											"type": "Expression"
-										}
-									}
-								],
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"wildcardFolderPath": {
-										"value": "@concat(pipeline().parameters.param_p_file_path,'/*')",
-										"type": "Expression"
-									},
-									"wildcardFileName": "*",
-									"enablePartitionDiscovery": false
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "PreserveHierarchy"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ""
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_p1_odc_source",
-								"type": "DatasetReference",
-								"parameters": {
-									"param_ds_filename": {
-										"value": "@pipeline().parameters.param_p_filename",
-										"type": "Expression"
-									},
-									"param_ds_filepath": {
-										"value": "@pipeline().parameters.param_p_file_path",
-										"type": "Expression"
-									},
-									"param_ds_container": {
-										"value": "@pipeline().parameters.param_p_container_name",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ds_p1_raw_layer",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"param_p_filename": {
-						"type": "string"
-					},
-					"param_p_container_name": {
-						"type": "string",
-						"defaultValue": "hello-world-pipelines"
-					},
-					"param_p_file_path": {
-						"type": "string",
-						"defaultValue": "p2/source_odc_data"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
 		}
 	]
 }
