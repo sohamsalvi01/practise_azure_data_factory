@@ -1,0 +1,3103 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-data-ingestion-transformation"
+		},
+		"ls_project_keyvault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVault-StoreSecrets.vault.azure.net/"
+		},
+		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_acl_adlsg2_datalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_param__adlsg2_dalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_storage_account_domain_name}"
+		},
+		"ls_sink_rbac_adlsg2_datalake_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_sas_adlsg2_datalake_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'ls_sink_sas_adlsg2_datalake'"
+		},
+		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_sql_server_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_sql_db_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "@{linkedService().param_ls_sql_server_admin_name}"
+		},
+		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-db-server--hello-world.database.windows.net"
+		},
+		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "AzureSQL__Source"
+		},
+		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sql_server_admin"
+		},
+		"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Sql/servers/sql-db-server--hello-world"
+		},
+		"MPE_new_AzureSQLServer_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlServer"
+		},
+		"mpe_adlsg2_datalake_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Storage/storageAccounts/adlsg2datalake"
+		},
+		"mpe_adlsg2_datalake_properties_groupId": {
+			"type": "string",
+			"defaultValue": "dfs"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/p2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p2/source_odc_data/",
+									"wildcardFileName": "*_part?1.csv",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ""
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p2_source_odc",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p2_target_raw_layer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p2_source_odc')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p2_target_raw_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "abc_filepath",
+										"value": "$$FILEPATH"
+									}
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p3/source_odc_extract/*",
+									"wildcardFileName": "*.csv",
+									"enablePartitionDiscovery": true,
+									"partitionRootPath": "hello-world-pipelines/p3/source_odc_extract/"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ""
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p3_source_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p3_target_raw_data_layer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p3_source_data')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p3_target_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p4')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p4/source_odc_data_extract/*",
+									"wildcardFileName": "*.zip",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings",
+										"preserveZipFileNameAsFolder": true
+									}
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": "csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p4_source_data_extract",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p4_target_raw_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p4_source_data_extract')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p4_target_raw_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p5')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p3/source_odc_extract/*",
+									"wildcardFileName": "*",
+									"deleteFilesAfterCompletion": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "FlattenHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p5_source_odc_location__binary_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p5_target_temp_location",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p5/target_temp_location/*",
+									"wildcardFileName": "*",
+									"deleteFilesAfterCompletion": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "FlattenHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p5_target_temp_location",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p5_target_archive_lication_binary_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p5_source_odc_location__binary_file')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p5_target_temp_location')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p5_target_archive_lication_binary_file')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p6')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "abc_active_flag",
+										"value": {
+											"value": "@string('true')",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_load_timestamp",
+										"value": {
+											"value": "@string(utcNow())",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_adf_name",
+										"value": {
+											"value": "@pipeline().DataFactory",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_pipeline_name",
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_run_id",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_trigger_name",
+										"value": {
+											"value": "@pipeline().TriggerName",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_trigger_time",
+										"value": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										}
+									}
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": {
+										"value": "@concat(pipeline().parameters.param_p_file_path,'/*')",
+										"type": "Expression"
+									},
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ""
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p1_odc_source",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_ds_filename": {
+										"value": "@pipeline().parameters.param_p_filename",
+										"type": "Expression"
+									},
+									"param_ds_filepath": {
+										"value": "@pipeline().parameters.param_p_file_path",
+										"type": "Expression"
+									},
+									"param_ds_container": {
+										"value": "@pipeline().parameters.param_p_container_name",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p1_raw_layer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"param_p_filename": {
+						"type": "string"
+					},
+					"param_p_container_name": {
+						"type": "string",
+						"defaultValue": "hello-world-pipelines"
+					},
+					"param_p_file_path": {
+						"type": "string",
+						"defaultValue": "p2/source_odc_data"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p1_odc_source')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p1_raw_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p7')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SP_ABC_NEXT_VAL",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "\nDECLARE \n    @VAR_LOOKUP_YEAR INT,\n    @VAR_LOOKUP_ADLSG2_DOMAIN_NAME VARCHAR(200),\n    @VAR_LOOKUP_CONTAINER_NAME VARCHAR(200),\n    @VAR_LOOKUP_DIRECTORY_PATH VARCHAR(200),\n    @VAR_LOOKUP_HIERARCHY_PATH VARCHAR(200),\n    @VAR_LOOKUP_FILENAME VARCHAR(200)\n\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_LOOKUP_YEAR OUTPUT, @VAR_LOOKUP_ADLSG2_DOMAIN_NAME OUTPUT, @VAR_LOOKUP_CONTAINER_NAME OUTPUT, @VAR_LOOKUP_DIRECTORY_PATH OUTPUT, @VAR_LOOKUP_HIERARCHY_PATH OUTPUT, @VAR_LOOKUP_FILENAME OUTPUT\n\nSELECT \n    @VAR_LOOKUP_YEAR AS VAR_LOOKUP_YEAR, \n    @VAR_LOOKUP_ADLSG2_DOMAIN_NAME AS VAR_LOOKUP_ADLSG2_DOMAIN_NAME, \n\t@VAR_LOOKUP_CONTAINER_NAME AS VAR_LOOKUP_CONTAINER_NAME, \n\t@VAR_LOOKUP_DIRECTORY_PATH AS VAR_LOOKUP_DIRECTORY_PATH, \n\t@VAR_LOOKUP_HIERARCHY_PATH AS VAR_LOOKUP_HIERARCHY_PATH, \n\t@VAR_LOOKUP_FILENAME AS VAR_LOOKUP_FILENAME\n",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_p7_source_ad_works_db",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_ds_sql_server_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_server",
+										"type": "Expression"
+									},
+									"param_ds_sql_db_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
+										"type": "Expression"
+									},
+									"param_ds_sql_server_admin_name": {
+										"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
+										"type": "Expression"
+									},
+									"param_ds_sql_server_password_secret_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					},
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "SP_ABC_NEXT_VAL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"additionalColumns": [
+									{
+										"name": "abc_active_flag",
+										"value": {
+											"value": "@string('true')",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_load_timestamp",
+										"value": {
+											"value": "@string(utcNow())",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_adf_name",
+										"value": {
+											"value": "@pipeline().DataFactory",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_pipeline_name",
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_run_id",
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_trigger_name",
+										"value": {
+											"value": "@pipeline().TriggerName",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "abc_trigger_time",
+										"value": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										}
+									}
+								],
+								"sqlReaderQuery": {
+									"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRES123S WHERE YEAR(ModifiedDate) = ', activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_YEAR)",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ""
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p7_source_ad_works_db",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_ds_sql_server_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_server",
+										"type": "Expression"
+									},
+									"param_ds_sql_db_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
+										"type": "Expression"
+									},
+									"param_ds_sql_server_admin_name": {
+										"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
+										"type": "Expression"
+									},
+									"param_ds_sql_server_password_secret_name": {
+										"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p7_target_raw_layer",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_ds_year": {
+										"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_YEAR",
+										"type": "Expression"
+									},
+									"param_ds_adlsg2_domain_name": {
+										"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_ADLSG2_DOMAIN_NAME",
+										"type": "Expression"
+									},
+									"param_ds_container_name": {
+										"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_CONTAINER_NAME",
+										"type": "Expression"
+									},
+									"param_ds_file_path": {
+										"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_DIRECTORY_PATH",
+										"type": "Expression"
+									},
+									"param_ds_hierarchy_path": {
+										"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_HIERARCHY_PATH",
+										"type": "Expression"
+									},
+									"param_ds_file_name": {
+										"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_FILENAME",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Log Failure",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[USP_ABC_PIPELINE_LOG_STATUS]",
+							"storedProcedureParameters": {
+								"CATEGORY": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].Category",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"COPY_DURATION": {
+									"value": {
+										"value": "@activity('Copy data1').output.copyDuration",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"DATA": {
+									"value": {
+										"value": "@string(activity('Copy data1').output.errors[0].Data)",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"DATA_FACTORY_NAME": {
+									"value": {
+										"value": "@pipeline().DataFactory",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"DATA_READ": {
+									"value": {
+										"value": "@activity('Copy data1').output.dataRead",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"DATA_WRITTEN": {
+									"value": {
+										"value": "@activity('Copy data1').output.dataWritten",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"ERROR_CODE": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].Code",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"ERROR_MESSAGE": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].Message",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"EVENT_TYPE": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].EventType",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"EXECEPTION_TYPE": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].ExceptionType",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"FILLES_WRITTEN": {
+									"value": {
+										"value": "@activity('Copy data1').output.filesWritten",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"INNER_EVENT_INFOS": {
+									"value": {
+										"value": "@string(activity('Copy data1').output.errors[0].InnerEventInfos)",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"MESSAGE_ID": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].MsgId",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"PIPELINE_ID": {
+									"value": {
+										"value": "@pipeline().GroupId",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"PIPELINE_NAME": {
+									"value": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"PIPELINE_STATUS": {
+									"value": {
+										"value": "@string('FAIL')",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"ROWS_COPIED": {
+									"value": null,
+									"type": "Int32"
+								},
+								"ROWS_READ": {
+									"value": {
+										"value": "@activity('Copy data1').output.rowsRead",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"RUN_ID": {
+									"value": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"SINK_PEAK_CONNECTIONS": {
+									"value": {
+										"value": "@activity('Copy data1').output.sinkPeakConnections",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"SOURCE": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].Source",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"SOURCE_PEAK_CONNECTIONS": {
+									"value": {
+										"value": "@activity('Copy data1').output.sourcePeakConnections",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"STACK_TRACE": {
+									"value": {
+										"value": "@activity('Copy data1').output.errors[0].StackTrace",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TRIGGER_NAME": {
+									"value": {
+										"value": "@pipeline().TriggerName",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TRIGGER_TIME": {
+									"value": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"type": "DateTime"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_souce_param__hello_word_source__advworks_db",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
+								"param_ls_sql_db_name": "AzureSQL__Source ",
+								"param_ls_sql_server_admin_name": "sql_server_admin",
+								"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
+							}
+						}
+					},
+					{
+						"name": "Log Success",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[USP_ABC_PIPELINE_LOG_STATUS]",
+							"storedProcedureParameters": {
+								"CATEGORY": {
+									"value": null,
+									"type": "Int32"
+								},
+								"COPY_DURATION": {
+									"value": {
+										"value": "@activity('Copy data1').output.copyDuration",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"DATA": {
+									"value": null,
+									"type": "String"
+								},
+								"DATA_FACTORY_NAME": {
+									"value": {
+										"value": "@pipeline().DataFactory",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"DATA_READ": {
+									"value": {
+										"value": "@activity('Copy data1').output.dataRead",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"DATA_WRITTEN": {
+									"value": {
+										"value": "@activity('Copy data1').output.dataWritten",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"ERROR_CODE": {
+									"value": null,
+									"type": "String"
+								},
+								"ERROR_MESSAGE": {
+									"value": null,
+									"type": "String"
+								},
+								"EVENT_TYPE": {
+									"value": null,
+									"type": "String"
+								},
+								"EXECEPTION_TYPE": {
+									"value": null,
+									"type": "String"
+								},
+								"FILLES_WRITTEN": {
+									"value": {
+										"value": "@activity('Copy data1').output.filesWritten",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"INNER_EVENT_INFOS": {
+									"value": null,
+									"type": "String"
+								},
+								"MESSAGE_ID": {
+									"value": null,
+									"type": "String"
+								},
+								"PIPELINE_ID": {
+									"value": {
+										"value": "@pipeline().GroupId",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"PIPELINE_NAME": {
+									"value": {
+										"value": "@pipeline().Pipeline",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"PIPELINE_STATUS": {
+									"value": {
+										"value": "@string('SUCCESS')",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"ROWS_COPIED": {
+									"value": {
+										"value": "@activity('Copy data1').output.rowsCopied",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"ROWS_READ": {
+									"value": {
+										"value": "@activity('Copy data1').output.rowsRead",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"RUN_ID": {
+									"value": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"SINK_PEAK_CONNECTIONS": {
+									"value": {
+										"value": "@activity('Copy data1').output.sinkPeakConnections",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"SOURCE": {
+									"value": null,
+									"type": "String"
+								},
+								"SOURCE_PEAK_CONNECTIONS": {
+									"value": {
+										"value": "@activity('Copy data1').output.sourcePeakConnections",
+										"type": "Expression"
+									},
+									"type": "Int32"
+								},
+								"STACK_TRACE": {
+									"value": null,
+									"type": "String"
+								},
+								"TRIGGER_NAME": {
+									"value": {
+										"value": "@pipeline().TriggerName",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"TRIGGER_TIME": {
+									"value": {
+										"value": "@pipeline().TriggerTime",
+										"type": "Expression"
+									},
+									"type": "DateTime"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_souce_param__hello_word_source__advworks_db",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
+								"param_ls_sql_db_name": "AzureSQL__Source ",
+								"param_ls_sql_server_admin_name": "sql_server_admin",
+								"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p7_source_ad_works_db')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p7_target_raw_layer')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce_param__hello_word_source__advworks_db')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p8_info_summary')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "transform_data",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_cricket_flatten_info_data",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"StageFileData": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_cricket_flatten_info_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p8_inning_overs')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "transform_data",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_cricket_flatten_inning_overs",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"StageFileData": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 16,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_cricket_flatten_inning_overs')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p8_players')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "transform_data",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_cricket_flatten_players",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"StageFileData": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 16,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_cricket_flatten_players')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p1_odc_source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"param_ds_filename": {
+						"type": "string"
+					},
+					"param_ds_filepath": {
+						"type": "string"
+					},
+					"param_ds_container": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().param_ds_filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().param_ds_filepath",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().param_ds_container",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p1_raw_layer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p2/target_raw_layer/",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p2_source_odc')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p2/source_odc_data",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p2_target_raw_layer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p2/target_raw_layer",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p3_source_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/source_odc_extract/",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p3_target_raw_data_layer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/target_raw_layer",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": null,
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p4_source_data_extract')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p4/source_odc_data_extract",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": "ZipDeflate",
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p4_target_raw_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p4/target_raw_files",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": null,
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_source_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/source_odc_extract",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_source_odc_location__binary_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/source_odc_extract",
+						"fileSystem": "hello-world-pipelines"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_archive_lication_binary_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p5/target_archive_folder",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"compression": {
+						"type": "gzip",
+						"level": "Optimal"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_archived_files_location')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "output.zip",
+						"folderPath": "p5/target_archive_folder",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": "ZipDeflate",
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": null
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_temp_location')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p5/target_temp_location",
+						"fileSystem": "hello-world-pipelines"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p7_source_ad_works_db')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_source__AzureSQL__Adv_works_db",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"param_ds_sql_server_name": {
+						"type": "string"
+					},
+					"param_ds_sql_db_name": {
+						"type": "string"
+					},
+					"param_ds_sql_server_admin_name": {
+						"type": "string"
+					},
+					"param_ds_sql_server_password_secret_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AddressID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AddressLine1",
+						"type": "nvarchar"
+					},
+					{
+						"name": "AddressLine2",
+						"type": "nvarchar"
+					},
+					{
+						"name": "City",
+						"type": "nvarchar"
+					},
+					{
+						"name": "StateProvince",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CountryRegion",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PostalCode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "TEST",
+					"table": "FAIL"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_source__AzureSQL__Adv_works_db')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p7_target_raw_layer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_param__adlsg2_dalake",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"param_ls_storage_account_domain_name": {
+							"value": "@dataset().param_ds_adlsg2_domain_name",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"param_ds_year": {
+						"type": "string"
+					},
+					"param_ds_adlsg2_domain_name": {
+						"type": "string"
+					},
+					"param_ds_container_name": {
+						"type": "string"
+					},
+					"param_ds_file_path": {
+						"type": "string"
+					},
+					"param_ds_hierarchy_path": {
+						"type": "string"
+					},
+					"param_ds_file_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().param_ds_file_name",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().param_ds_file_path,'/',dataset().param_ds_hierarchy_path)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().param_ds_container_name",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_param__adlsg2_dalake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_source_json_files_cricket_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/source_cricket_json_files",
+						"fileSystem": "hello-world-pipelines"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"meta": {
+							"type": "object",
+							"properties": {
+								"data_version": {
+									"type": "string"
+								},
+								"created": {
+									"type": "string"
+								},
+								"revision": {
+									"type": "integer"
+								}
+							}
+						},
+						"info": {
+							"type": "object",
+							"properties": {
+								"balls_per_over": {
+									"type": "integer"
+								},
+								"city": {
+									"type": "string"
+								},
+								"dates": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"event": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"match_number": {
+											"type": "integer"
+										}
+									}
+								},
+								"gender": {
+									"type": "string"
+								},
+								"match_type": {
+									"type": "string"
+								},
+								"match_type_number": {
+									"type": "integer"
+								},
+								"officials": {
+									"type": "object",
+									"properties": {
+										"match_referees": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"reserve_umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"tv_umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"outcome": {
+									"type": "object",
+									"properties": {
+										"winner": {
+											"type": "string"
+										},
+										"by": {
+											"type": "object",
+											"properties": {
+												"runs": {
+													"type": "integer"
+												}
+											}
+										}
+									}
+								},
+								"overs": {
+									"type": "integer"
+								},
+								"player_of_match": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"players": {
+									"type": "object",
+									"properties": {
+										"South Africa": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"Australia": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"registry": {
+									"type": "object",
+									"properties": {
+										"people": {
+											"type": "object",
+											"properties": {
+												"A Zampa": {
+													"type": "string"
+												},
+												"AK Markram": {
+													"type": "string"
+												},
+												"CM Brown": {
+													"type": "string"
+												},
+												"DA Miller": {
+													"type": "string"
+												},
+												"DA Warner": {
+													"type": "string"
+												},
+												"GJ Maxwell": {
+													"type": "string"
+												},
+												"H Klaasen": {
+													"type": "string"
+												},
+												"HE van der Dussen": {
+													"type": "string"
+												},
+												"J Srinath": {
+													"type": "string"
+												},
+												"JP Inglis": {
+													"type": "string"
+												},
+												"JR Hazlewood": {
+													"type": "string"
+												},
+												"JS Wilson": {
+													"type": "string"
+												},
+												"K Rabada": {
+													"type": "string"
+												},
+												"KA Maharaj": {
+													"type": "string"
+												},
+												"L Ngidi": {
+													"type": "string"
+												},
+												"M Jansen": {
+													"type": "string"
+												},
+												"M Labuschagne": {
+													"type": "string"
+												},
+												"MA Starc": {
+													"type": "string"
+												},
+												"MP Stoinis": {
+													"type": "string"
+												},
+												"MR Marsh": {
+													"type": "string"
+												},
+												"PJ Cummins": {
+													"type": "string"
+												},
+												"Q de Kock": {
+													"type": "string"
+												},
+												"RA Kettleborough": {
+													"type": "string"
+												},
+												"RK Illingworth": {
+													"type": "string"
+												},
+												"SA Abbott": {
+													"type": "string"
+												},
+												"SPD Smith": {
+													"type": "string"
+												},
+												"T Bavuma": {
+													"type": "string"
+												},
+												"T Shamsi": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								},
+								"season": {
+									"type": "string"
+								},
+								"team_type": {
+									"type": "string"
+								},
+								"teams": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"toss": {
+									"type": "object",
+									"properties": {
+										"decision": {
+											"type": "string"
+										},
+										"winner": {
+											"type": "string"
+										}
+									}
+								},
+								"venue": {
+									"type": "string"
+								}
+							}
+						},
+						"innings": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"team": {
+										"type": "string"
+									},
+									"overs": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"over": {
+													"type": "integer"
+												},
+												"deliveries": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"batter": {
+																"type": "string"
+															},
+															"bowler": {
+																"type": "string"
+															},
+															"non_striker": {
+																"type": "string"
+															},
+															"runs": {
+																"type": "object",
+																"properties": {
+																	"batter": {
+																		"type": "integer"
+																	},
+																	"extras": {
+																		"type": "integer"
+																	},
+																	"total": {
+																		"type": "integer"
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									"powerplays": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"from": {
+													"type": "number"
+												},
+												"to": {
+													"type": "number"
+												},
+												"type": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_info')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files/players",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_innings')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files/innings",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_players')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files/players",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p9_source_json_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "file_100kb.json",
+						"folderPath": "p9/source_souce_sample_files",
+						"fileSystem": "hello-world-pipelines"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_souce__helloworld_adlsg2_souce_odc_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p9_target_flatten_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p9/target_flatten_elements_csv",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sink_helloworld_adlsg2_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_project_keyvault')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_project_keyvault_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink__adlsg2__adv_works_raw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_project_keyvault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "secret-adlsg2datalake-AccessKey"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_project_keyvault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_acl_adlsg2_datalake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_sink_acl_adlsg2_datalake_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_helloworld_adlsg2_raw_data_layer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_param__adlsg2_dalake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"param_ls_storage_account_domain_name": {
+						"type": "string",
+						"defaultValue": "https://adlsg2datalake.dfs.core.windows.net"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_sink_param__adlsg2_dalake_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_rbac_adlsg2_datalake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_sink_rbac_adlsg2_datalake_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sink_sas_adlsg2_datalake')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"sasUri": "[parameters('ls_sink_sas_adlsg2_datalake_sasUri')]"
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_souce__helloworld_adlsg2_souce_odc_data')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_souce_param__hello_word_source__advworks_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"param_ls_sql_server_name": {
+						"type": "string",
+						"defaultValue": "sql-db-server--hello-world.database.windows.net"
+					},
+					"param_ls_sql_db_name": {
+						"type": "string",
+						"defaultValue": "AzureSQL__Source "
+					},
+					"param_ls_sql_server_admin_name": {
+						"type": "string",
+						"defaultValue": "sql_server_admin"
+					},
+					"param_ls_sql_server_password_secret_name": {
+						"type": "string",
+						"defaultValue": "secret-adv-works-db-password"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_server')]",
+					"database": "[parameters('ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_project_keyvault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": {
+							"value": "@linkedService().param_ls_sql_server_password_secret_name",
+							"type": "Expression"
+						}
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_project_keyvault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_source__AzureSQL__Adv_works_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server')]",
+					"database": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_project_keyvault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "secret-adv-works-db-password"
+					}
+				},
+				"connectVia": {
+					"referenceName": "IR-new-Managed-VNet",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/IR-new-Managed-VNet')]",
+				"[concat(variables('factoryId'), '/linkedServices/ls_project_keyvault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IR-new-Managed-VNet')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "North Europe",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 10,
+							"cleanup": false,
+							"customProperties": []
+						},
+						"pipelineExternalComputeScaleProperties": {
+							"timeToLive": 60,
+							"numberOfPipelineNodes": 1,
+							"numberOfExternalNodes": 1
+						}
+					}
+				},
+				"managedVirtualNetwork": {
+					"type": "ManagedVirtualNetworkReference",
+					"referenceName": "default"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_cricket_flatten_info_data')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_source_json_files_cricket_data",
+								"type": "DatasetReference"
+							},
+							"name": "StageFileData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_target_flatten_info",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FlattenInfo"
+						},
+						{
+							"name": "DelistArrayColumns"
+						},
+						{
+							"name": "SelectAndRenameColumns"
+						},
+						{
+							"name": "InfoSummaryPK"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          meta as (data_version as string, created as string, revision as integer),",
+						"          info as (balls_per_over as integer, city as string, dates as string[], event as (name as string, match_number as integer), gender as string, match_type as string, match_type_number as integer, officials as (match_referees as string[], reserve_umpires as string[], tv_umpires as string[], umpires as string[]), outcome as (winner as string, by as (runs as integer)), overs as integer, player_of_match as string[], players as ({South Africa} as string[], Australia as string[]), registry as (people as ({A Zampa} as string, {AK Markram} as string, {CM Brown} as string, {DA Miller} as string, {DA Warner} as string, {GJ Maxwell} as string, {H Klaasen} as string, {HE van der Dussen} as string, {J Srinath} as string, {JP Inglis} as string, {JR Hazlewood} as string, {JS Wilson} as string, {K Rabada} as string, {KA Maharaj} as string, {L Ngidi} as string, {M Jansen} as string, {M Labuschagne} as string, {MA Starc} as string, {MP Stoinis} as string, {MR Marsh} as string, {PJ Cummins} as string, {Q de Kock} as string, {RA Kettleborough} as string, {RK Illingworth} as string, {SA Abbott} as string, {SPD Smith} as string, {T Bavuma} as string, {T Shamsi} as string)), season as string, team_type as string, teams as string[], toss as (decision as string, winner as string), venue as string),",
+						"          innings as (team as string, overs as (over as integer, deliveries as (batter as string, bowler as string, non_striker as string, runs as (batter as integer, extras as integer, total as integer))[])[], powerplays as (from as double, to as double, type as string)[])[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> StageFileData",
+						"StageFileData foldDown(unroll(info.dates),",
+						"     mapColumn(",
+						"          data_version = meta.data_version,",
+						"          created = meta.created,",
+						"          revision = meta.revision,",
+						"          balls_per_over = info.balls_per_over,",
+						"          city = info.city,",
+						"          dates = info.dates,",
+						"          event = info.event.name,",
+						"          match_number = info.event.match_number,",
+						"          gender = info.gender,",
+						"          match_type = info.match_type,",
+						"          match_type_number = info.match_type_number,",
+						"          outcome = info.outcome.winner,",
+						"          by = info.outcome.by,",
+						"          overs = info.overs,",
+						"          season = info.season,",
+						"          team_type = info.team_type,",
+						"          toss = info.toss.winner,",
+						"          decision = info.toss.decision,",
+						"          venue = info.venue,",
+						"          teams = info.teams,",
+						"          player_of_match = info.player_of_match",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
+						"FlattenInfo derive(teams1 = teams[1],",
+						"          teams2 = teams[2],",
+						"          player_of_match1 = player_of_match[1],",
+						"          player_of_match2 = player_of_match[2],",
+						"          win_by = replace(replace(split(toString(by),':')[1],'\"',''),'{',''),",
+						"          win_by_wickets_or_runs = replace(replace(split(toString(by),':')[2],'\"',''),'}','')) ~> DelistArrayColumns",
+						"InfoSummaryPK select(mapColumn(",
+						"          info_summary_pk,",
+						"          data_version,",
+						"          created,",
+						"          revision,",
+						"          balls_per_over,",
+						"          city,",
+						"          dates,",
+						"          event,",
+						"          match_number,",
+						"          gender,",
+						"          match_type,",
+						"          match_type_number,",
+						"          outcome,",
+						"          overs,",
+						"          season,",
+						"          team_type,",
+						"          toss,",
+						"          decision,",
+						"          venue,",
+						"          teams,",
+						"          player_of_match,",
+						"          teams1,",
+						"          teams2,",
+						"          player_of_match1,",
+						"          player_of_match2,",
+						"          win_by,",
+						"          win_by_wickets_or_runs",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectAndRenameColumns",
+						"DelistArrayColumns keyGenerate(output(info_summary_pk as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> InfoSummaryPK",
+						"SelectAndRenameColumns sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['info.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p8_source_json_files_cricket_data')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p8_target_flatten_info')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_cricket_flatten_inning_overs')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_source_json_files_cricket_data",
+								"type": "DatasetReference"
+							},
+							"name": "StageFileData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_target_flatten_innings",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "FlattenInnings"
+						},
+						{
+							"name": "DelistRun"
+						},
+						{
+							"name": "DelistWickets"
+						},
+						{
+							"name": "RenamingColumns"
+						},
+						{
+							"name": "InningsOversPK"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          meta as (data_version as string, created as string, revision as integer),",
+						"          info as (balls_per_over as integer, city as string, dates as string[], event as (name as string, match_number as integer), gender as string, match_type as string, match_type_number as integer, officials as (match_referees as string[], reserve_umpires as string[], tv_umpires as string[], umpires as string[]), outcome as (winner as string, by as (runs as integer)), overs as integer, player_of_match as string[], players as ({South Africa} as string[], Australia as string[]), registry as (people as ({A Zampa} as string, {AK Markram} as string, {CM Brown} as string, {DA Miller} as string, {DA Warner} as string, {GJ Maxwell} as string, {H Klaasen} as string, {HE van der Dussen} as string, {J Srinath} as string, {JP Inglis} as string, {JR Hazlewood} as string, {JS Wilson} as string, {K Rabada} as string, {KA Maharaj} as string, {L Ngidi} as string, {M Jansen} as string, {M Labuschagne} as string, {MA Starc} as string, {MP Stoinis} as string, {MR Marsh} as string, {PJ Cummins} as string, {Q de Kock} as string, {RA Kettleborough} as string, {RK Illingworth} as string, {SA Abbott} as string, {SPD Smith} as string, {T Bavuma} as string, {T Shamsi} as string)), season as string, team_type as string, teams as string[], toss as (decision as string, winner as string), venue as string),",
+						"          innings as (team as string, overs as (over as integer, deliveries as (batter as string, bowler as string, non_striker as string, runs as (batter as integer, extras as integer, total as integer))[])[], powerplays as (from as double, to as double, type as string)[])[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> StageFileData",
+						"StageFileData foldDown(unrollMultiple(info.dates,innings,innings.overs,innings.overs.deliveries),",
+						"     mapColumn(",
+						"          data_version = meta.data_version,",
+						"          created = meta.created,",
+						"          revision = meta.revision,",
+						"          dates = info.dates,",
+						"          event = info.event.name,",
+						"          match_number = info.event.match_number,",
+						"          match_type = info.match_type,",
+						"          match_type_number = info.match_type_number,",
+						"          innings = innings.overs.over,",
+						"          team = innings.team,",
+						"          over = innings.overs.over,",
+						"          batter = innings.overs.deliveries.batter,",
+						"          bowler = innings.overs.deliveries.bowler,",
+						"          non_striker = innings.overs.deliveries.non_striker,",
+						"          runs = innings.overs.deliveries.runs,",
+						"          wickets = innings.overs.deliveries",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> FlattenInnings",
+						"FlattenInnings derive(runs = split(toString(runs),','),",
+						"          batter_run_per_ball = split(split(toString(runs),',')[1],':')[2],",
+						"          extra_run_per_ball = split(split(toString(runs),',')[2],':')[2],",
+						"          total_run_per_ball = split(split(toString(runs),',')[3],':')[2],",
+						"          deliveries_wickets1 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[1],",
+						"          deliveries_wickets2 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[2],",
+						"          deliveries_wickets3 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[3]) ~> DelistRun",
+						"DelistRun derive(wickets_kind = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"kind\"'),",
+						"          player_out = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"player_out\"'),",
+						"          fielders_name = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"name\"')) ~> DelistWickets",
+						"InningsOversPK select(mapColumn(",
+						"          InningsOvers_PK,",
+						"          data_version,",
+						"          created,",
+						"          revision,",
+						"          dates,",
+						"          event,",
+						"          match_number,",
+						"          match_type,",
+						"          match_type_number,",
+						"          innings,",
+						"          team,",
+						"          over,",
+						"          batter,",
+						"          bowler,",
+						"          non_striker,",
+						"          batter_run_per_ball,",
+						"          extra_run_per_ball,",
+						"          total_run_per_ball,",
+						"          wickets_kind,",
+						"          player_out,",
+						"          fielders_name",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> RenamingColumns",
+						"DelistWickets keyGenerate(output(InningsOvers_PK as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> InningsOversPK",
+						"RenamingColumns sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['innings.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p8_source_json_files_cricket_data')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p8_target_flatten_innings')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_cricket_flatten_players')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_source_json_files_cricket_data",
+								"type": "DatasetReference"
+							},
+							"name": "StageFileData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_p8_target_flatten_info",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "KeysAndPlayerObject"
+						},
+						{
+							"name": "Team1AndTeam2Array"
+						},
+						{
+							"name": "FlattenTeamObject"
+						},
+						{
+							"name": "SplitTeamAndPlayerNames"
+						},
+						{
+							"name": "FlattenPlayerNames"
+						},
+						{
+							"name": "PlayerPK"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          meta as (data_version as string, created as string, revision as integer),",
+						"          info as (balls_per_over as integer, city as string, dates as string[], event as (name as string, match_number as integer), gender as string, match_type as string, match_type_number as integer, officials as (match_referees as string[], reserve_umpires as string[], tv_umpires as string[], umpires as string[]), outcome as (winner as string, by as (runs as integer)), overs as integer, player_of_match as string[], players as ({South Africa} as string[], Australia as string[]), registry as (people as ({A Zampa} as string, {AK Markram} as string, {CM Brown} as string, {DA Miller} as string, {DA Warner} as string, {GJ Maxwell} as string, {H Klaasen} as string, {HE van der Dussen} as string, {J Srinath} as string, {JP Inglis} as string, {JR Hazlewood} as string, {JS Wilson} as string, {K Rabada} as string, {KA Maharaj} as string, {L Ngidi} as string, {M Jansen} as string, {M Labuschagne} as string, {MA Starc} as string, {MP Stoinis} as string, {MR Marsh} as string, {PJ Cummins} as string, {Q de Kock} as string, {RA Kettleborough} as string, {RK Illingworth} as string, {SA Abbott} as string, {SPD Smith} as string, {T Bavuma} as string, {T Shamsi} as string)), season as string, team_type as string, teams as string[], toss as (decision as string, winner as string), venue as string),",
+						"          innings as (team as string, overs as (over as integer, deliveries as (batter as string, bowler as string, non_striker as string, runs as (batter as integer, extras as integer, total as integer))[])[], powerplays as (from as double, to as double, type as string)[])[]",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     documentForm: 'singleDocument') ~> StageFileData",
+						"StageFileData foldDown(unroll(info.dates),",
+						"     mapColumn(",
+						"          data_version = meta.data_version,",
+						"          created = meta.created,",
+						"          revision = meta.revision,",
+						"          dates = info.dates,",
+						"          event = info.event.name,",
+						"          match_number = info.event.match_number,",
+						"          match_type = info.match_type,",
+						"          match_type_number = info.match_type_number,",
+						"          players = info.players",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> KeysAndPlayerObject",
+						"KeysAndPlayerObject derive(players2 = split(replace(replace(replace(toString(players),'{',''),'}',''),'],\"',']|\"'),'|')) ~> Team1AndTeam2Array",
+						"Team1AndTeam2Array foldDown(unroll(players2),",
+						"     mapColumn(",
+						"          data_version,",
+						"          created,",
+						"          revision,",
+						"          dates,",
+						"          event,",
+						"          match_number,",
+						"          match_type,",
+						"          match_type_number,",
+						"          players2",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> FlattenTeamObject",
+						"FlattenTeamObject derive(players_team_name = split(toString(players2),':')[1],",
+						"          players3 = split(split(toString(players2),':')[2],',')) ~> SplitTeamAndPlayerNames",
+						"SplitTeamAndPlayerNames foldDown(unroll(players3),",
+						"     mapColumn(",
+						"          data_version,",
+						"          created,",
+						"          revision,",
+						"          dates,",
+						"          event,",
+						"          match_number,",
+						"          match_type,",
+						"          match_type_number,",
+						"          players_team_name,",
+						"          players3",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> FlattenPlayerNames",
+						"FlattenPlayerNames keyGenerate(output(PlayerPK as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> PlayerPK",
+						"PlayerPK select(mapColumn(",
+						"          PlayerPK,",
+						"          data_version,",
+						"          created,",
+						"          revision,",
+						"          dates,",
+						"          event,",
+						"          match_number,",
+						"          match_type,",
+						"          match_type_number,",
+						"          players_team_name,",
+						"          players3",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['players.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p8_source_json_files_cricket_data')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p8_target_flatten_info')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks",
+			"apiVersion": "2018-06-01",
+			"properties": {},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default/MPE_new_AzureSQLServer')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"privateLinkResourceId": "[parameters('MPE_new_AzureSQLServer_properties_privateLinkResourceId')]",
+				"groupId": "[parameters('MPE_new_AzureSQLServer_properties_groupId')]"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/default/mpe_adlsg2_datalake')]",
+			"type": "Microsoft.DataFactory/factories/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"privateLinkResourceId": "[parameters('mpe_adlsg2_datalake_properties_privateLinkResourceId')]",
+				"groupId": "[parameters('mpe_adlsg2_datalake_properties_groupId')]"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/managedVirtualNetworks/default')]"
+			]
+		}
+	]
+}

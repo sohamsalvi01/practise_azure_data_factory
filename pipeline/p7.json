@@ -1,0 +1,597 @@
+{
+	"name": "p7",
+	"properties": {
+		"activities": [
+			{
+				"name": "SP_ABC_NEXT_VAL",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "\nDECLARE \n    @VAR_LOOKUP_YEAR INT,\n    @VAR_LOOKUP_ADLSG2_DOMAIN_NAME VARCHAR(200),\n    @VAR_LOOKUP_CONTAINER_NAME VARCHAR(200),\n    @VAR_LOOKUP_DIRECTORY_PATH VARCHAR(200),\n    @VAR_LOOKUP_HIERARCHY_PATH VARCHAR(200),\n    @VAR_LOOKUP_FILENAME VARCHAR(200)\n\nEXECUTE [dbo].[SP_ABC_NEXT_VAL] @VAR_LOOKUP_YEAR OUTPUT, @VAR_LOOKUP_ADLSG2_DOMAIN_NAME OUTPUT, @VAR_LOOKUP_CONTAINER_NAME OUTPUT, @VAR_LOOKUP_DIRECTORY_PATH OUTPUT, @VAR_LOOKUP_HIERARCHY_PATH OUTPUT, @VAR_LOOKUP_FILENAME OUTPUT\n\nSELECT \n    @VAR_LOOKUP_YEAR AS VAR_LOOKUP_YEAR, \n    @VAR_LOOKUP_ADLSG2_DOMAIN_NAME AS VAR_LOOKUP_ADLSG2_DOMAIN_NAME, \n\t@VAR_LOOKUP_CONTAINER_NAME AS VAR_LOOKUP_CONTAINER_NAME, \n\t@VAR_LOOKUP_DIRECTORY_PATH AS VAR_LOOKUP_DIRECTORY_PATH, \n\t@VAR_LOOKUP_HIERARCHY_PATH AS VAR_LOOKUP_HIERARCHY_PATH, \n\t@VAR_LOOKUP_FILENAME AS VAR_LOOKUP_FILENAME\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_p7_source_ad_works_db",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_ds_sql_server_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server",
+								"type": "Expression"
+							},
+							"param_ds_sql_db_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_admin_name": {
+								"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_password_secret_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "SP_ABC_NEXT_VAL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"additionalColumns": [
+							{
+								"name": "abc_active_flag",
+								"value": {
+									"value": "@string('true')",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_load_timestamp",
+								"value": {
+									"value": "@string(utcNow())",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_adf_name",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_pipeline_name",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_run_id",
+								"value": {
+									"value": "@pipeline().RunId",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_trigger_name",
+								"value": {
+									"value": "@pipeline().TriggerName",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "abc_trigger_time",
+								"value": {
+									"value": "@pipeline().TriggerTime",
+									"type": "Expression"
+								}
+							}
+						],
+						"sqlReaderQuery": {
+							"value": "@concat('SELECT TOP 1000 * FROM SALESLT.ADDRES123S WHERE YEAR(ModifiedDate) = ', activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_YEAR)",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ""
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_p7_source_ad_works_db",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_ds_sql_server_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server",
+								"type": "Expression"
+							},
+							"param_ds_sql_db_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_db_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_admin_name": {
+								"value": "@pipeline().globalParameters.param_global__sql_server_admin_name",
+								"type": "Expression"
+							},
+							"param_ds_sql_server_password_secret_name": {
+								"value": "@pipeline().globalParameters.param_global__source_sql_server_admin_password_secret_name",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_p7_target_raw_layer",
+						"type": "DatasetReference",
+						"parameters": {
+							"param_ds_year": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_YEAR",
+								"type": "Expression"
+							},
+							"param_ds_adlsg2_domain_name": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_ADLSG2_DOMAIN_NAME",
+								"type": "Expression"
+							},
+							"param_ds_container_name": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_CONTAINER_NAME",
+								"type": "Expression"
+							},
+							"param_ds_file_path": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_DIRECTORY_PATH",
+								"type": "Expression"
+							},
+							"param_ds_hierarchy_path": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_HIERARCHY_PATH",
+								"type": "Expression"
+							},
+							"param_ds_file_name": {
+								"value": "@activity('SP_ABC_NEXT_VAL').output.firstRow.VAR_LOOKUP_FILENAME",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Log Failure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[USP_ABC_PIPELINE_LOG_STATUS]",
+					"storedProcedureParameters": {
+						"CATEGORY": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Category",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"COPY_DURATION": {
+							"value": {
+								"value": "@activity('Copy data1').output.copyDuration",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"DATA": {
+							"value": {
+								"value": "@string(activity('Copy data1').output.errors[0].Data)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DATA_FACTORY_NAME": {
+							"value": {
+								"value": "@pipeline().DataFactory",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DATA_READ": {
+							"value": {
+								"value": "@activity('Copy data1').output.dataRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"DATA_WRITTEN": {
+							"value": {
+								"value": "@activity('Copy data1').output.dataWritten",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"ERROR_CODE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Code",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ERROR_MESSAGE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Message",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"EVENT_TYPE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].EventType",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"EXECEPTION_TYPE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].ExceptionType",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"FILLES_WRITTEN": {
+							"value": {
+								"value": "@activity('Copy data1').output.filesWritten",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"INNER_EVENT_INFOS": {
+							"value": {
+								"value": "@string(activity('Copy data1').output.errors[0].InnerEventInfos)",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"MESSAGE_ID": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].MsgId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_ID": {
+							"value": {
+								"value": "@pipeline().GroupId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_NAME": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_STATUS": {
+							"value": {
+								"value": "@string('FAIL')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ROWS_COPIED": {
+							"value": null,
+							"type": "Int32"
+						},
+						"ROWS_READ": {
+							"value": {
+								"value": "@activity('Copy data1').output.rowsRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"RUN_ID": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SINK_PEAK_CONNECTIONS": {
+							"value": {
+								"value": "@activity('Copy data1').output.sinkPeakConnections",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"SOURCE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].Source",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SOURCE_PEAK_CONNECTIONS": {
+							"value": {
+								"value": "@activity('Copy data1').output.sourcePeakConnections",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"STACK_TRACE": {
+							"value": {
+								"value": "@activity('Copy data1').output.errors[0].StackTrace",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TRIGGER_NAME": {
+							"value": {
+								"value": "@pipeline().TriggerName",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TRIGGER_TIME": {
+							"value": {
+								"value": "@pipeline().TriggerTime",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_souce_param__hello_word_source__advworks_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
+						"param_ls_sql_db_name": "AzureSQL__Source ",
+						"param_ls_sql_server_admin_name": "sql_server_admin",
+						"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
+					}
+				}
+			},
+			{
+				"name": "Log Success",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy data1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[USP_ABC_PIPELINE_LOG_STATUS]",
+					"storedProcedureParameters": {
+						"CATEGORY": {
+							"value": null,
+							"type": "Int32"
+						},
+						"COPY_DURATION": {
+							"value": {
+								"value": "@activity('Copy data1').output.copyDuration",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"DATA": {
+							"value": null,
+							"type": "String"
+						},
+						"DATA_FACTORY_NAME": {
+							"value": {
+								"value": "@pipeline().DataFactory",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"DATA_READ": {
+							"value": {
+								"value": "@activity('Copy data1').output.dataRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"DATA_WRITTEN": {
+							"value": {
+								"value": "@activity('Copy data1').output.dataWritten",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"ERROR_CODE": {
+							"value": null,
+							"type": "String"
+						},
+						"ERROR_MESSAGE": {
+							"value": null,
+							"type": "String"
+						},
+						"EVENT_TYPE": {
+							"value": null,
+							"type": "String"
+						},
+						"EXECEPTION_TYPE": {
+							"value": null,
+							"type": "String"
+						},
+						"FILLES_WRITTEN": {
+							"value": {
+								"value": "@activity('Copy data1').output.filesWritten",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"INNER_EVENT_INFOS": {
+							"value": null,
+							"type": "String"
+						},
+						"MESSAGE_ID": {
+							"value": null,
+							"type": "String"
+						},
+						"PIPELINE_ID": {
+							"value": {
+								"value": "@pipeline().GroupId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_NAME": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"PIPELINE_STATUS": {
+							"value": {
+								"value": "@string('SUCCESS')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ROWS_COPIED": {
+							"value": {
+								"value": "@activity('Copy data1').output.rowsCopied",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"ROWS_READ": {
+							"value": {
+								"value": "@activity('Copy data1').output.rowsRead",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"RUN_ID": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"SINK_PEAK_CONNECTIONS": {
+							"value": {
+								"value": "@activity('Copy data1').output.sinkPeakConnections",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"SOURCE": {
+							"value": null,
+							"type": "String"
+						},
+						"SOURCE_PEAK_CONNECTIONS": {
+							"value": {
+								"value": "@activity('Copy data1').output.sourcePeakConnections",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"STACK_TRACE": {
+							"value": null,
+							"type": "String"
+						},
+						"TRIGGER_NAME": {
+							"value": {
+								"value": "@pipeline().TriggerName",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TRIGGER_TIME": {
+							"value": {
+								"value": "@pipeline().TriggerTime",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_souce_param__hello_word_source__advworks_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"param_ls_sql_server_name": "sql-db-server--hello-world.database.windows.net",
+						"param_ls_sql_db_name": "AzureSQL__Source ",
+						"param_ls_sql_server_admin_name": "sql_server_admin",
+						"param_ls_sql_server_password_secret_name": "secret-adv-works-db-password"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}

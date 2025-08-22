@@ -1,0 +1,23 @@
+{
+	"name": "ls_sink__adlsg2__adv_works_raw",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://adlsg2datalake.dfs.core.windows.net/",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_project_keyvault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "secret-adlsg2datalake-AccessKey"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IR-new-Managed-VNet",
+			"type": "IntegrationRuntimeReference"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
+}

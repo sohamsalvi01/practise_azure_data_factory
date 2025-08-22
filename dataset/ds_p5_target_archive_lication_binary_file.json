@@ -1,0 +1,22 @@
+{
+	"name": "ds_p5_target_archive_lication_binary_file",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "p5/target_archive_folder",
+				"fileSystem": "hello-world-pipelines"
+			},
+			"compression": {
+				"type": "gzip",
+				"level": "Optimal"
+			}
+		}
+	}
+}

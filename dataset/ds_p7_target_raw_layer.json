@@ -1,0 +1,59 @@
+{
+	"name": "ds_p7_target_raw_layer",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_param__adlsg2_dalake",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"param_ls_storage_account_domain_name": {
+					"value": "@dataset().param_ds_adlsg2_domain_name",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"param_ds_year": {
+				"type": "string"
+			},
+			"param_ds_adlsg2_domain_name": {
+				"type": "string"
+			},
+			"param_ds_container_name": {
+				"type": "string"
+			},
+			"param_ds_file_path": {
+				"type": "string"
+			},
+			"param_ds_hierarchy_path": {
+				"type": "string"
+			},
+			"param_ds_file_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().param_ds_file_name",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat(dataset().param_ds_file_path,'/',dataset().param_ds_hierarchy_path)",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().param_ds_container_name",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

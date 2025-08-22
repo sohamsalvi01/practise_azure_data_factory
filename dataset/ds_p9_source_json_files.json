@@ -1,0 +1,20 @@
+{
+	"name": "ds_p9_source_json_files",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "file_100kb.json",
+				"folderPath": "p9/source_souce_sample_files",
+				"fileSystem": "hello-world-pipelines"
+			}
+		},
+		"schema": {}
+	}
+}

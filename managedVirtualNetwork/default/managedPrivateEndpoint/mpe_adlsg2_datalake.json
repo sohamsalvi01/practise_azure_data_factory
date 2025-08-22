@@ -1,0 +1,7 @@
+{
+	"name": "mpe_adlsg2_datalake",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Storage/storageAccounts/adlsg2datalake",
+		"groupId": "dfs"
+	}
+}

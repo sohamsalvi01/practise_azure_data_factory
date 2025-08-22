@@ -1,0 +1,25 @@
+{
+	"name": "ds_p4_target_raw_data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "p4/target_raw_files",
+				"fileSystem": "hello-world-pipelines"
+			},
+			"columnDelimiter": ",",
+			"compressionCodec": null,
+			"compressionLevel": "Optimal",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

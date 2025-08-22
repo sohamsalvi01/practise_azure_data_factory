@@ -1,0 +1,69 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-data-ingestion-transformation"
+		},
+		"ls_project_keyvault_properties_typeProperties_baseUrl": {
+			"value": "https://KeyVault-StoreSecrets.vault.azure.net/"
+		},
+		"ls_sink__adlsg2__adv_works_raw_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_acl_adlsg2_datalake_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_helloworld_adlsg2_raw_data_layer_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_param__adlsg2_dalake_properties_typeProperties_url": {
+			"value": "@{linkedService().param_ls_storage_account_domain_name}"
+		},
+		"ls_sink_rbac_adlsg2_datalake_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_sink_sas_adlsg2_datalake_sasUri": {
+			"value": ""
+		},
+		"ls_souce__helloworld_adlsg2_souce_odc_data_properties_typeProperties_url": {
+			"value": "https://adlsg2datalake.dfs.core.windows.net/"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_server": {
+			"value": "@{linkedService().param_ls_sql_server_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_database": {
+			"value": "@{linkedService().param_ls_sql_db_name}"
+		},
+		"ls_souce_param__hello_word_source__advworks_db_properties_typeProperties_userName": {
+			"value": "@{linkedService().param_ls_sql_server_admin_name}"
+		},
+		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_server": {
+			"value": "sql-db-server--hello-world.database.windows.net"
+		},
+		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_database": {
+			"value": "AzureSQL__Source"
+		},
+		"ls_source__AzureSQL__Adv_works_db_properties_typeProperties_userName": {
+			"value": "sql_server_admin"
+		},
+		"MPE_new_AzureSQLServer_properties_privateLinkResourceId": {
+			"value": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Sql/servers/sql-db-server--hello-world"
+		},
+		"MPE_new_AzureSQLServer_properties_groupId": {
+			"value": "sqlServer"
+		},
+		"mpe_adlsg2_datalake_properties_privateLinkResourceId": {
+			"value": "/subscriptions/53c41c2e-b1e3-4c90-a919-cfe6f3b0b167/resourceGroups/RSG__HELLO_WORLD/providers/Microsoft.Storage/storageAccounts/adlsg2datalake"
+		},
+		"mpe_adlsg2_datalake_properties_groupId": {
+			"value": "dfs"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

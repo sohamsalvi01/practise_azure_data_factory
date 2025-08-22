@@ -1,0 +1,22 @@
+{
+	"param_global__source_sql_server": {
+		"type": "string",
+		"value": "sql-db-server--hello-world.database.windows.net"
+	},
+	"param_global__source_sql_db_name": {
+		"type": "string",
+		"value": "AzureSQL__Source "
+	},
+	"param_global__sql_server_admin_name": {
+		"type": "string",
+		"value": "sql_server_admin"
+	},
+	"param_global__source_sql_server_admin_password_secret_name": {
+		"type": "string",
+		"value": "secret-adv-works-db-password"
+	},
+	"param_global__sink_adlsg2_datalake": {
+		"type": "string",
+		"value": "adlsg2datalake"
+	}
+}

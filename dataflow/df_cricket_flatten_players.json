@@ -1,0 +1,133 @@
+{
+	"name": "df_cricket_flatten_players",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_p8_source_json_files_cricket_data",
+						"type": "DatasetReference"
+					},
+					"name": "StageFileData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_p8_target_flatten_info",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "KeysAndPlayerObject"
+				},
+				{
+					"name": "Team1AndTeam2Array"
+				},
+				{
+					"name": "FlattenTeamObject"
+				},
+				{
+					"name": "SplitTeamAndPlayerNames"
+				},
+				{
+					"name": "FlattenPlayerNames"
+				},
+				{
+					"name": "PlayerPK"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          meta as (data_version as string, created as string, revision as integer),",
+				"          info as (balls_per_over as integer, city as string, dates as string[], event as (name as string, match_number as integer), gender as string, match_type as string, match_type_number as integer, officials as (match_referees as string[], reserve_umpires as string[], tv_umpires as string[], umpires as string[]), outcome as (winner as string, by as (runs as integer)), overs as integer, player_of_match as string[], players as ({South Africa} as string[], Australia as string[]), registry as (people as ({A Zampa} as string, {AK Markram} as string, {CM Brown} as string, {DA Miller} as string, {DA Warner} as string, {GJ Maxwell} as string, {H Klaasen} as string, {HE van der Dussen} as string, {J Srinath} as string, {JP Inglis} as string, {JR Hazlewood} as string, {JS Wilson} as string, {K Rabada} as string, {KA Maharaj} as string, {L Ngidi} as string, {M Jansen} as string, {M Labuschagne} as string, {MA Starc} as string, {MP Stoinis} as string, {MR Marsh} as string, {PJ Cummins} as string, {Q de Kock} as string, {RA Kettleborough} as string, {RK Illingworth} as string, {SA Abbott} as string, {SPD Smith} as string, {T Bavuma} as string, {T Shamsi} as string)), season as string, team_type as string, teams as string[], toss as (decision as string, winner as string), venue as string),",
+				"          innings as (team as string, overs as (over as integer, deliveries as (batter as string, bowler as string, non_striker as string, runs as (batter as integer, extras as integer, total as integer))[])[], powerplays as (from as double, to as double, type as string)[])[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> StageFileData",
+				"StageFileData foldDown(unroll(info.dates),",
+				"     mapColumn(",
+				"          data_version = meta.data_version,",
+				"          created = meta.created,",
+				"          revision = meta.revision,",
+				"          dates = info.dates,",
+				"          event = info.event.name,",
+				"          match_number = info.event.match_number,",
+				"          match_type = info.match_type,",
+				"          match_type_number = info.match_type_number,",
+				"          players = info.players",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> KeysAndPlayerObject",
+				"KeysAndPlayerObject derive(players2 = split(replace(replace(replace(toString(players),'{',''),'}',''),'],\"',']|\"'),'|')) ~> Team1AndTeam2Array",
+				"Team1AndTeam2Array foldDown(unroll(players2),",
+				"     mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          match_type,",
+				"          match_type_number,",
+				"          players2",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> FlattenTeamObject",
+				"FlattenTeamObject derive(players_team_name = split(toString(players2),':')[1],",
+				"          players3 = split(split(toString(players2),':')[2],',')) ~> SplitTeamAndPlayerNames",
+				"SplitTeamAndPlayerNames foldDown(unroll(players3),",
+				"     mapColumn(",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          match_type,",
+				"          match_type_number,",
+				"          players_team_name,",
+				"          players3",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> FlattenPlayerNames",
+				"FlattenPlayerNames keyGenerate(output(PlayerPK as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> PlayerPK",
+				"PlayerPK select(mapColumn(",
+				"          PlayerPK,",
+				"          data_version,",
+				"          created,",
+				"          revision,",
+				"          dates,",
+				"          event,",
+				"          match_number,",
+				"          match_type,",
+				"          match_type_number,",
+				"          players_team_name,",
+				"          players3",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['players.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

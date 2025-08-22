@@ -1,0 +1,1194 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-data-ingestion-transformation"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p3_target_raw_data_layer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/target_raw_layer",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": null,
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p4_source_data_extract')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p4/source_odc_data_extract",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": "ZipDeflate",
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p4_target_raw_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p4/target_raw_files",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": null,
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_source_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/source_odc_extract",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_source_odc_location__binary_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p3/source_odc_extract",
+						"fileSystem": "hello-world-pipelines"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_archive_lication_binary_file')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p5/target_archive_folder",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"compression": {
+						"type": "gzip",
+						"level": "Optimal"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_archived_files_location')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "output.zip",
+						"folderPath": "p5/target_archive_folder",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"compressionCodec": "ZipDeflate",
+					"compressionLevel": "Optimal",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": null
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p5_target_temp_location')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p5/target_temp_location",
+						"fileSystem": "hello-world-pipelines"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p7_source_ad_works_db')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_source__AzureSQL__Adv_works_db",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"param_ds_sql_server_name": {
+						"type": "string"
+					},
+					"param_ds_sql_db_name": {
+						"type": "string"
+					},
+					"param_ds_sql_server_admin_name": {
+						"type": "string"
+					},
+					"param_ds_sql_server_password_secret_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AddressID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AddressLine1",
+						"type": "nvarchar"
+					},
+					{
+						"name": "AddressLine2",
+						"type": "nvarchar"
+					},
+					{
+						"name": "City",
+						"type": "nvarchar"
+					},
+					{
+						"name": "StateProvince",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CountryRegion",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PostalCode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "rowguid",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "ModifiedDate",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "TEST",
+					"table": "FAIL"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p7_target_raw_layer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_param__adlsg2_dalake",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"param_ls_storage_account_domain_name": {
+							"value": "@dataset().param_ds_adlsg2_domain_name",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"param_ds_year": {
+						"type": "string"
+					},
+					"param_ds_adlsg2_domain_name": {
+						"type": "string"
+					},
+					"param_ds_container_name": {
+						"type": "string"
+					},
+					"param_ds_file_path": {
+						"type": "string"
+					},
+					"param_ds_hierarchy_path": {
+						"type": "string"
+					},
+					"param_ds_file_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().param_ds_file_name",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat(dataset().param_ds_file_path,'/',dataset().param_ds_hierarchy_path)",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().param_ds_container_name",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_source_json_files_cricket_data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/source_cricket_json_files",
+						"fileSystem": "hello-world-pipelines"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"meta": {
+							"type": "object",
+							"properties": {
+								"data_version": {
+									"type": "string"
+								},
+								"created": {
+									"type": "string"
+								},
+								"revision": {
+									"type": "integer"
+								}
+							}
+						},
+						"info": {
+							"type": "object",
+							"properties": {
+								"balls_per_over": {
+									"type": "integer"
+								},
+								"city": {
+									"type": "string"
+								},
+								"dates": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"event": {
+									"type": "object",
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"match_number": {
+											"type": "integer"
+										}
+									}
+								},
+								"gender": {
+									"type": "string"
+								},
+								"match_type": {
+									"type": "string"
+								},
+								"match_type_number": {
+									"type": "integer"
+								},
+								"officials": {
+									"type": "object",
+									"properties": {
+										"match_referees": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"reserve_umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"tv_umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"umpires": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"outcome": {
+									"type": "object",
+									"properties": {
+										"winner": {
+											"type": "string"
+										},
+										"by": {
+											"type": "object",
+											"properties": {
+												"runs": {
+													"type": "integer"
+												}
+											}
+										}
+									}
+								},
+								"overs": {
+									"type": "integer"
+								},
+								"player_of_match": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"players": {
+									"type": "object",
+									"properties": {
+										"South Africa": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"Australia": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										}
+									}
+								},
+								"registry": {
+									"type": "object",
+									"properties": {
+										"people": {
+											"type": "object",
+											"properties": {
+												"A Zampa": {
+													"type": "string"
+												},
+												"AK Markram": {
+													"type": "string"
+												},
+												"CM Brown": {
+													"type": "string"
+												},
+												"DA Miller": {
+													"type": "string"
+												},
+												"DA Warner": {
+													"type": "string"
+												},
+												"GJ Maxwell": {
+													"type": "string"
+												},
+												"H Klaasen": {
+													"type": "string"
+												},
+												"HE van der Dussen": {
+													"type": "string"
+												},
+												"J Srinath": {
+													"type": "string"
+												},
+												"JP Inglis": {
+													"type": "string"
+												},
+												"JR Hazlewood": {
+													"type": "string"
+												},
+												"JS Wilson": {
+													"type": "string"
+												},
+												"K Rabada": {
+													"type": "string"
+												},
+												"KA Maharaj": {
+													"type": "string"
+												},
+												"L Ngidi": {
+													"type": "string"
+												},
+												"M Jansen": {
+													"type": "string"
+												},
+												"M Labuschagne": {
+													"type": "string"
+												},
+												"MA Starc": {
+													"type": "string"
+												},
+												"MP Stoinis": {
+													"type": "string"
+												},
+												"MR Marsh": {
+													"type": "string"
+												},
+												"PJ Cummins": {
+													"type": "string"
+												},
+												"Q de Kock": {
+													"type": "string"
+												},
+												"RA Kettleborough": {
+													"type": "string"
+												},
+												"RK Illingworth": {
+													"type": "string"
+												},
+												"SA Abbott": {
+													"type": "string"
+												},
+												"SPD Smith": {
+													"type": "string"
+												},
+												"T Bavuma": {
+													"type": "string"
+												},
+												"T Shamsi": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								},
+								"season": {
+									"type": "string"
+								},
+								"team_type": {
+									"type": "string"
+								},
+								"teams": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								},
+								"toss": {
+									"type": "object",
+									"properties": {
+										"decision": {
+											"type": "string"
+										},
+										"winner": {
+											"type": "string"
+										}
+									}
+								},
+								"venue": {
+									"type": "string"
+								}
+							}
+						},
+						"innings": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"team": {
+										"type": "string"
+									},
+									"overs": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"over": {
+													"type": "integer"
+												},
+												"deliveries": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"batter": {
+																"type": "string"
+															},
+															"bowler": {
+																"type": "string"
+															},
+															"non_striker": {
+																"type": "string"
+															},
+															"runs": {
+																"type": "object",
+																"properties": {
+																	"batter": {
+																		"type": "integer"
+																	},
+																	"extras": {
+																		"type": "integer"
+																	},
+																	"total": {
+																		"type": "integer"
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									},
+									"powerplays": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"from": {
+													"type": "number"
+												},
+												"to": {
+													"type": "number"
+												},
+												"type": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_info')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files/players",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_innings')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files/innings",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p8_target_flatten_players')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p8/target_raw_flatten_files/players",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p9_source_json_files')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_souce__helloworld_adlsg2_souce_odc_data",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "file_100kb.json",
+						"folderPath": "p9/source_souce_sample_files",
+						"fileSystem": "hello-world-pipelines"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_p9_target_flatten_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sink_helloworld_adlsg2_raw_data_layer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "p9/target_flatten_elements_csv",
+						"fileSystem": "hello-world-pipelines"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p2')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p2/source_odc_data/",
+									"wildcardFileName": "*_part?1.csv",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ""
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p2_source_odc",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p2_target_raw_layer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p3')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "abc_filepath",
+										"value": "$$FILEPATH"
+									}
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p3/source_odc_extract/*",
+									"wildcardFileName": "*.csv",
+									"enablePartitionDiscovery": true,
+									"partitionRootPath": "hello-world-pipelines/p3/source_odc_extract/"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ""
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p3_source_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p3_target_raw_data_layer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p3_target_raw_data_layer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p4')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p4/source_odc_data_extract/*",
+									"wildcardFileName": "*.zip",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings",
+										"preserveZipFileNameAsFolder": true
+									}
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": "csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p4_source_data_extract",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p4_target_raw_data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p4_source_data_extract')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p4_target_raw_data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/p5')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p3/source_odc_extract/*",
+									"wildcardFileName": "*",
+									"deleteFilesAfterCompletion": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "FlattenHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p5_source_odc_location__binary_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p5_target_temp_location",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "Copy data2",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFolderPath": "p5/target_temp_location/*",
+									"wildcardFileName": "*",
+									"deleteFilesAfterCompletion": false
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "FlattenHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_p5_target_temp_location",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_p5_target_archive_lication_binary_file",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_p5_source_odc_location__binary_file')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p5_target_temp_location')]",
+				"[concat(variables('factoryId'), '/datasets/ds_p5_target_archive_lication_binary_file')]"
+			]
+		}
+	]
+}

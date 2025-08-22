@@ -1,0 +1,70 @@
+{
+	"name": "ds_p7_source_ad_works_db",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_source__AzureSQL__Adv_works_db",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"param_ds_sql_server_name": {
+				"type": "string"
+			},
+			"param_ds_sql_db_name": {
+				"type": "string"
+			},
+			"param_ds_sql_server_admin_name": {
+				"type": "string"
+			},
+			"param_ds_sql_server_password_secret_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AddressID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AddressLine1",
+				"type": "nvarchar"
+			},
+			{
+				"name": "AddressLine2",
+				"type": "nvarchar"
+			},
+			{
+				"name": "City",
+				"type": "nvarchar"
+			},
+			{
+				"name": "StateProvince",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CountryRegion",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PostalCode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "rowguid",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "TEST",
+			"table": "FAIL"
+		}
+	}
+}

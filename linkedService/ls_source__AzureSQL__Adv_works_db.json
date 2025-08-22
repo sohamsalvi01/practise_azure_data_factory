@@ -1,0 +1,28 @@
+{
+	"name": "ls_source__AzureSQL__Adv_works_db",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sql-db-server--hello-world.database.windows.net",
+			"database": "AzureSQL__Source",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "sql_server_admin",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_project_keyvault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "secret-adv-works-db-password"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IR-new-Managed-VNet",
+			"type": "IntegrationRuntimeReference"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
+}
