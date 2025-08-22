@@ -23,16 +23,19 @@
 			],
 			"transformations": [
 				{
-					"name": "FlattenInfo"
+					"name": "FlattenInnings"
 				},
 				{
-					"name": "derivedColumn1"
+					"name": "DelistRun"
 				},
 				{
-					"name": "derivedColumn2"
+					"name": "DelistWickets"
 				},
 				{
-					"name": "select1"
+					"name": "RenamingColumns"
+				},
+				{
+					"name": "InningsOversPK"
 				}
 			],
 			"scriptLines": [
@@ -65,18 +68,19 @@
 				"          wickets = innings.overs.deliveries",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> FlattenInfo",
-				"FlattenInfo derive(runs = split(toString(runs),','),",
+				"     skipDuplicateMapOutputs: false) ~> FlattenInnings",
+				"FlattenInnings derive(runs = split(toString(runs),','),",
 				"          batter_run_per_ball = split(split(toString(runs),',')[1],':')[2],",
 				"          extra_run_per_ball = split(split(toString(runs),',')[2],':')[2],",
 				"          total_run_per_ball = split(split(toString(runs),',')[3],':')[2],",
 				"          deliveries_wickets1 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[1],",
 				"          deliveries_wickets2 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[2],",
-				"          deliveries_wickets3 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[3]) ~> derivedColumn1",
-				"derivedColumn1 derive(wickets_kind = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"kind\"'),",
+				"          deliveries_wickets3 = split( replace(replace(replace(replace(toString(split(toString(wickets),'},\"')[2]), 'wickets\":[{',''), '\"fielders\":[{','') ,'}','') ,']',''), ',')[3]) ~> DelistRun",
+				"DelistRun derive(wickets_kind = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"kind\"'),",
 				"          player_out = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"player_out\"'),",
-				"          fielders_name = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"name\"')) ~> derivedColumn2",
-				"derivedColumn2 select(mapColumn(",
+				"          fielders_name = at( [ toString(split(deliveries_wickets1,':')[1]) -> toString(split(deliveries_wickets1,':')[2]), toString(split(deliveries_wickets2,':')[1]) -> toString(split(deliveries_wickets2,':')[2]), toString(split(deliveries_wickets3,':')[1]) -> toString(split(deliveries_wickets3,':')[2]) ], '\"name\"')) ~> DelistWickets",
+				"InningsOversPK select(mapColumn(",
+				"          InningsOvers_PK,",
 				"          data_version,",
 				"          created,",
 				"          revision,",
@@ -92,16 +96,23 @@
 				"          bowler,",
 				"          non_striker,",
 				"          runs,",
+				"          wickets,",
 				"          batter_run_per_ball,",
 				"          extra_run_per_ball,",
 				"          total_run_per_ball,",
+				"          deliveries_wickets1,",
+				"          deliveries_wickets2,",
+				"          deliveries_wickets3,",
 				"          wickets_kind,",
 				"          player_out,",
 				"          fielders_name",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"     skipDuplicateMapOutputs: true) ~> RenamingColumns",
+				"DelistWickets keyGenerate(output(InningsOvers_PK as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> InningsOversPK",
+				"RenamingColumns sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['innings.csv'],",
 				"     umask: 0022,",
